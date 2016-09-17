@@ -1,0 +1,29 @@
+<!doctype>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <style>
+            body{
+                font-family: arial;font-size:12px;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Les caches</h1>
+        <a href="les_formulaires.html">[précédent]</a><br/><br/>
+
+        Le framework permet de gérer du cache de différente façon : utiliser des fichiers, utiliser du cache mémoire
+        classique, Redis, Memcache ou Apc.<br/><br/>
+        Pour utiliser un cache, il suffit d’utiliser cette classe :
+
+        <pre>
+$oCache = new \Venus\lib\Cache;
+$oCache->setCacheType(‘apc’); // apc, memcache, redis, file, memory
+        </pre>
+
+        Attention, pour Redis et Memcache vous devez créer des fichiers de configuration globals ou par Portail. Vous
+        trouverez un exemple dans le dossier de configuration global.
+
+        <a href="application_multilangue.html">[suivant]</a>
+    </body>
+</html>

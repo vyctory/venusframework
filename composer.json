@@ -1,0 +1,28 @@
+{
+  "name": "las93/venus3",
+  "license": "MIT",
+  "version": "3.0.32-alpha",
+  "type": "Framework",
+  "description": "Framework in PHP",
+  "keywords": ["Framework", "php"],
+  "homepage": "https://github.com/las93/venus3",
+  "authors": [
+    {
+      "name": "Paquet Judicaël",
+      "email": "judicael.paquet@gmail.com",
+      "role": "CIO"
+    }
+  ],
+  "autoload": {
+    "psr-4": { "Venus\\": "Venus/" }
+  },
+  "require": {
+    "php": ">=7.0.0",
+    "las93/apollina2": "2.0.3-alpha",
+    "las93/attila2": "*",
+    "mobiledetect/mobiledetectlib": "*"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^4.8"
+  }
+}

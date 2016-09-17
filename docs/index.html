@@ -1,0 +1,33 @@
+<!doctype>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <style>
+            body{
+                font-family: arial;font-size:12px;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Getting Start</h1>
+        Nouveau framework PHP basé sur un concept MVC solide et très malléable.<br/><br/>
+        Pour afficher Hello World, voici le Vhost apache Type à mettre en place :
+        <pre>
+&lt;VirtualHost *:80&gt;
+ ServerName localhost
+ DocumentRoot E:/venus/public/Demo/
+ &lt;Directory E:/venus/public/Demo/&gt;
+     DirectoryIndex index.php
+     AllowOverride All
+     Order allow,deny
+     Allow from all
+&lt;/Directory&gt;
+&lt;/VirtualHost&gt;
+        </pre>
+        N'oubliez pas de redémarrer Apache pour que les modifications soient prises en compte.<br/><br/>
+        Vous pouvez également utiliser le serveur interne proposé par Venus en faisant php bin/console server:run
+        <br/><br/>
+        Pour vori votre page, vous pouvez à présent faire http://localhost/ dans votre navigateur Internet.<br/><br/>
+        <a href="mon-premier-bundle.html">[suivant]</a>
+    </body>
+</html>

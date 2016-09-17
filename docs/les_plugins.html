@@ -1,0 +1,64 @@
+<!doctype>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <style>
+            body{
+                font-family: arial;font-size:12px;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Les plugins</h1>
+        <a href="les_controlleurs_avances.html">[précédent]</a><br/><br/>
+
+        Enorme nouveauté dans Venus2, la possibilité de créer des plugins, soit des extensions utilisables au sein du
+        framework.<br/><br/>
+        Vous pourrez donc créer un plugin en ajoutant un dossier dans : /bundles/src/plugins/<br/><br/>
+        Il est également possible de créer un nouveau plugin avec un batch :<br/><br/>
+        /> php bin/console generate:plugin –n MonPlugin<br/><br/>
+        Si mon plugin a besoin d’installer des tables complémentaires, je vais pouvoir l’indiquer dans la méthode
+        spécialement conçue pour installer le plugin :
+
+        <pre>
+    /**
+     * install method
+     *
+     * @access public
+     * @return void
+     */
+    public function install()
+    {
+        $this->installDb;
+    }
+        </pre>
+
+        Cela va automatiquement lire le fichier Db.conf et va créer les tables, les entités et les modèles
+        correspondants.<br/><br/>
+        Quand on a fini de créer son plugin, il faut installer celui-ci.<br/><br/>
+        En premier lieu, on va rajouter ce plugin dans le fichier /bundles/conf/Plugin.conf<br/><br/>
+
+
+        <pre>
+[
+    "MonPlugin"
+]
+        </pre>
+
+        Une grande nouveauté de Venus est de faire des services d’injection avec l’injection de dépendance.<br/><br/>
+        Voici un exemple d’injection de service que l’on peut faire dans un contrôleur :<br/><br/>
+
+        <pre>
+$this->di->set(mongo, function() {
+    return new Mongo();
+}, true);
+        </pre>
+
+        On voit ensuite lancer le script qui permet d’installer le plugin sur le portail qu’on désire :<br/><br/>
+        \>php bin/console install:plugin –p MonPortail
+
+        <pre>
+
+        <a href="route_avancee.html">[suivant]</a>
+    </body>
+</html>

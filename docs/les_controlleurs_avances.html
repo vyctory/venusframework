@@ -1,0 +1,114 @@
+<!doctype>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <style>
+            body{
+                font-family: arial;font-size:12px;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Les caches</h1>
+        <a href="les_autoloaders.html">[précédent]</a><br/><br/>
+
+        Les contrôleurs ont deux triggers qui permettent d’être initialisé :<br/><br/>
+        1/ La fonction initialize permet d’initialiser le contrôleur la première fois qu’il est appelé et uniquement
+        cette fois-là pendant tout le déroulement du script :<br/><br/>
+
+        <pre>
+public function initialize() { ; }
+        </pre>
+
+        2/ La fonction onConstruct permet d’initialiser le contrôleur à chaque fois qu’il est instancié :
+
+        <pre>
+public function onConstruct() { ; }
+        </pre>
+
+        Une grande nouveauté de Venus est de faire des services d’injection avec l’injection de dépendance.<br/><br/>
+        Voici un exemple d’injection de service que l’on peut faire dans un contrôleur :<br/><br/>
+
+        <pre>
+$this->di->set(mongo, function() {
+    return new Mongo();
+}, true);
+        </pre>
+
+        Le true (on peut mettre false) permet de définir si on partage le service à toutes les instances ou uniquement à
+        cette instance. (le true valide le partage pour tous).<br/><br/>
+        Dans un contrôleur, pour l’appeler, il suffit d’utiliser l’une de ces deux méthodes :<br/><br/>
+
+        <pre>
+// Directement en appelant mongo, le nom de l’injection
+$this->mongo->connect();
+
+// En passant par le raccourcis de l’injection de dépendance
+$this->di->get('mongo')->connect();
+        </pre>
+
+        Vous pouvez récupérer le contenu des POST envoyé par formulaire voire tester si il y a un POST envoyé de cette
+        façon :
+
+        <pre>
+if ($this->request->isPost() == true) {
+    $sName = $this->request->getPost("name");
+    $sFirstname = $this->request->getPost("firstname");
+}
+        </pre>
+
+        Dans un car très particulier comme par exemple lors de la création de web service en Rest, vous pouvez récupérer
+        le contenu du PUT :
+
+        <pre>
+$this->request->getPut();
+        </pre>
+
+        Dans Venus Framework, il faudra utiliser un objet Request pour aller chercher un grand nombre d’information
+        comme :
+
+        <pre>
+$A = new Request;
+$A->request->get(‘name’) => pour chercher le $_POST[‘name’];
+$A->cookies->get(‘name’) => pour chercher le $_COOKIE[‘name’];
+$A->files->get(‘name’) => pour chercher le $_FILES[‘name’];
+$A->headers->get(‘name’) => pour chercher le header défini par name
+$A->query->get(‘name’) => pour chercher le $_GET[‘name’];
+$A->server->get(‘name’) => pour chercher le $_SERVER[‘name’];
+        </pre>
+
+        Toutes ces méthodes sont utilisées de manières identiques et autorisent également un deuxième paramètre qui est
+        la valeur par défaut retournée si le paramètre n’est pas défini.<br/><br/>
+        Venus vous propose 2 triggers sur les contrôleurs qui se lancent juste avant et juste après l’appel de
+        l’action :
+
+        <pre>
+    public function beforeExecuteRoute()
+    {
+         // s’exécute juste avant l’appel de l’action
+    }
+
+    public function afterExecuteRoute()
+    {
+         // s’exécute juste après l’appel de l’action
+    }
+        </pre>
+
+        Dans cette nouvelle version de Venus Framework, l’objet Response prend de l’importance.
+
+        <pre>
+$response = new \Venus\lib\Response();
+
+$response->setContent('<html><body>Hello World!</body></html>');
+$response->setStatusCode(\Venus\lib\Response::HTTP_OK);
+$response->headers->set('content-Type', 'text/html');
+
+$response->send();
+        </pre>
+
+        Ici, on envoie du contenu, on indique un numéro de statut, rajoutons un header HTML avant d’envoyer la totalité
+        au navigateur avec send().
+
+        <a href="les_plugins.html">[suivant]</a>
+    </body>
+</html>

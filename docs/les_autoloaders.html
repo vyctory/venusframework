@@ -1,0 +1,44 @@
+<!doctype>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <style>
+            body{
+                font-family: arial;font-size:12px;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Les caches</h1>
+        <a href="application_multilangue.html">[précédent]</a><br/><br/>
+
+        Tous les autoloader sont gérés dans le fichier /bundles/conf/Autoload.php.<br/><br/>
+        Le premier Autoload est la fonction classique qui intègre l’ensemble du framework Venus2.<br/><br/>
+        Le deuxième autoload intègre le fichier autoloader de composer.json. En cas de besoin, vous pouvez ajouter un
+        package dans /composer.json et qui sera automatiquement pris en charge par Venus2 après avoir joué composer
+        install ou composer update.<br/><br/>
+        Le troisième autoload intègre les fichiers autoload (ou fichiers simples) définit dans le fichier
+        /bundles/conf/Const.conf comme ceci :
+
+        <pre>
+{
+	"autoload": [
+		"bundles/ext/vendor/facebook/base_facebook.php",
+		"bundles/ext/vendor/facebook/facebook.php"
+	]
+}
+        </pre>
+
+        Venus 2 permet d’ajouter des packages composer pour alimenter le Framework de nouvelles fonctionnalités.<br/><br/>
+        D’ailleurs pour ceux qui préfèrent Twig ou Smarty, ils peuvent rajouter ce gestionnaire de templating par
+        composer. Dans Venus 2, le gestionnaire de templating est devenu indépendant et proposé sous composer sous le
+        nom d’Apollina.<br/><br/>
+        Vous pouvez ajouter votre package dans /composer.json, relancer la machine en allant dans le dossier
+        /bundles/ext/ et en faisant composer install (ou composer update).<br/><br/>
+        Pour utiliser Smarty à la place d’Apollina, vous pouvez ajouter le composer (smarty/smarty) [voir le point
+        précédent] et vous pouvez adapter le fichier /bundles/lib/Vendor.php pour faire fonctionner Smarty à la place
+        d’Apollina.<br/><br/>
+
+        <a href="les_controlleurs_avances.html">[suivant]</a>
+    </body>
+</html>

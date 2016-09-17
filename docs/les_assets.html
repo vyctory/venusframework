@@ -1,0 +1,50 @@
+<!doctype>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <style>
+            body{
+                font-family: arial;font-size:12px;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Les assets</h1>
+        <a href="route_avancee.html">[précédent]</a><br/><br/>
+
+        Venus propose pour sa version 2 de gérer les asset. Ce concept permet de gérer des CSS et des JS qui ne sont pas
+        dans le dossier public classique mais dans le dossier public du bundle. Voici un exemple pour ajouter des CSS et
+        des Javascript avec les asset :
+
+        <pre>
+$oAsset = new \Venus\lib\Asset;
+$oAsset->stylesheets(array('Demo/public/css/style.css'));
+$oAsset->javascripts(array('Demo/public/js/javascript.js'));
+        </pre>
+
+        Dans le fichier de configuration Const.conf vous pourrez rajouter une option pour ajouter un paramètre à l’URL
+        des assets ; cela permet de décacher automatiquement les fichiers sur les navigateurs des utilisateurs et sur
+        les cache de type Varnish (Akamai) [on appelle ça du cache busting].
+
+        <pre>
+"asset_version" : "v2" // ajoute v2
+        </pre>
+
+        Vous pouvez appeler les asset de cette façon : <br/><br/>
+
+        <pre>
+&lg;link rel="stylesheet" href="/getCss?Demo/public/css/global"&gt;
+&lg;link rel="stylesheet" href="/getJs?Demo/public/js/global"&gt;
+ou en utilisant une function templating comme ceci :
+&lg;link rel="stylesheet" href="{asset template="Demo/public/css/global"}"&gt;
+&lg;link rel="stylesheet" href="{asset template="Demo/public/js/global"}"&gt;
+        </pre>
+
+        On voit ensuite lancer le script qui permet d’installer le plugin sur le portail qu’on désire :<br/><br/>
+        \>php bin/console install:plugin –p MonPortail
+
+        <pre>
+
+        <a href="xxx.html">[suivant]</a>
+    </body>
+</html>

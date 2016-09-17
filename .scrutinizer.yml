@@ -1,0 +1,11 @@
+build:
+    tests:
+        override:
+            -
+                command: 'phpunit --coverage-clover=some-file'
+                coverage:
+                    file: 'some-file'
+                    format: 'clover'
+    environment:
+        php:
+            version: 7.0.7       # Common versions: 5.4, 5.5, 5.6, 7.0 or hhvm

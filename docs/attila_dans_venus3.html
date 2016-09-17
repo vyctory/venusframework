@@ -1,0 +1,76 @@
+<!doctype>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <style>
+            body{
+                font-family: arial;font-size:12px;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Attila dans Venus</h1>
+        <a href="index.html">[précédent]</a><br/><br/>
+
+        Pour commencer avec Attila, vous pouvez regarder la documentation officielle de l'outil que vous trouverez ici :
+        <a href="../vendor/las93/attila/docs/index.html">[documentation Attila]</a><br/><br/>
+        Par défaut, le modèle appelée dans Venus est l'entité qui porte le même nom que le controlleur afin de vous
+        accélérer le travail. Cela ne correspond pas toujours au besoin et vous pouvez donc choisir d'appeler une
+        nouvelle entité dans votre contrôleur.<br/><br/>
+        Nous allons supposer la création de cette table (profitez en pour utiliser le scaffolding qui va créer la table,
+        l'entité et le modèle associés) dans /bundles/conf/Db.conf :<br/><br/>
+        <pre>
+"news": {
+    "fields": {
+    "id": {
+        "type": "int",
+        "key": "primary",
+        "null": false,
+        "undefined": true,
+        "autoincrement": true
+    },
+    "title": {
+        "type": "varchar",
+            "null": false
+        }
+    }
+}
+        </pre>
+        Lançons le scaffolding :
+        <pre>
+            php bin/console  scaffolding:run -v -p HomeBundle -c -e
+        </pre>
+        Après le lancement du scaffolding, vous aurez les fichiers de l'entité et du modèle de cette nouvelle table dans
+        votre framework<br/><br/>
+        A présent nous allons ajouter l’utilisation de ce modèle dans notre controller afin de bien comprendre la
+        rapidité et l’efficacité du framework (c’est notre méthode recommandée mais ce n’est pas la seule méthode
+        possible). Nous allons dans notre controller /src/Demo/app/Controller/Exemple1.php.<br/><br/>
+
+        <pre>
+namespace Venus\src\Demo\Controller;
+
+use \Venus\src\Demo\common\Controller as Controller;
+use \Venus\src\Demo\Model\news as news;
+
+# ... #
+
+    public function __construct() {
+
+		$this->modelNews = function() { return new news; }; //création de notre raccourcis directement dans le constructeur
+		parent::__construct();
+	}
+
+# ... #
+
+    public function show() {
+
+		$aExemple = $this->modelNews->get(); # nous rajoutons notre action ici avec un get automatique
+		var_dump($aExemple);
+	}
+
+        </pre>
+        Si vous testez ces lignes, vous verrez que chaque ligne insérée en base de données apparait dans le var_dump.
+        <br/><br/>
+        <a href="utilisation_des_modeles.html">[suivant]</a>
+    </body>
+</html>
