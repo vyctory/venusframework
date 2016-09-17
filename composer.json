@@ -1,7 +1,7 @@
-{
-  "name": "las93/venus3",
+﻿{
+  "name": "vyctory/venusframework",
   "license": "MIT",
-  "version": "3.0.32-alpha",
+  "version": "2.9.1-alpha",
   "type": "Framework",
   "description": "Framework in PHP",
   "keywords": ["Framework", "php"],
