@@ -21,6 +21,7 @@
 namespace Venus\src\Batch\Controller;
 
 use \Venus\src\Batch\common\Controller as Controller;
+use \Venus\lib\Bash;
 
 /**
  * Batch that generate files and folders

@@ -17,9 +17,9 @@ declare(strict_types = 1);
 error_reporting(E_ALL);
 ini_set('display_error', 'on');
 
-set_include_path(get_include_path().PATH_SEPARATOR.__DIR__.'\..\bundles\\');
+set_include_path(get_include_path().PATH_SEPARATOR.__DIR__.'\..\bundles\\'.PATH_SEPARATOR.__DIR__.'\..\kernel\\');
 
-require 'conf/AutoLoad.php';
+require 'AutoLoad.php';
 
 $oRouter = new \Venus\core\Router();
 $oRouter->run();

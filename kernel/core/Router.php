@@ -126,19 +126,19 @@ class Router implements LoggerAwareInterface
 
                 foreach (Config::get('Plugins')->list as $iKey => $sPlugin) {
 
-                    if (file_exists(__DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'src'.DIRECTORY_SEPARATOR.'plugins'.DIRECTORY_SEPARATOR.$sPlugin.DIRECTORY_SEPARATOR.'public'.$_SERVER['REQUEST_URI'])) {
+                    if (file_exists(__DIR__ . DIRECTORY_SEPARATOR .DIRECTORY_SEPARATOR.'src'.DIRECTORY_SEPARATOR.'plugins'.DIRECTORY_SEPARATOR.$sPlugin.DIRECTORY_SEPARATOR.'public'.$_SERVER['REQUEST_URI'])) {
 
-                        echo file_get_contents(__DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'src'.DIRECTORY_SEPARATOR.'plugins'.DIRECTORY_SEPARATOR.$sPlugin.DIRECTORY_SEPARATOR.'public'.$_SERVER['REQUEST_URI']);
+                        echo file_get_contents(__DIR__ . DIRECTORY_SEPARATOR .DIRECTORY_SEPARATOR.'src'.DIRECTORY_SEPARATOR.'plugins'.DIRECTORY_SEPARATOR.$sPlugin.DIRECTORY_SEPARATOR.'public'.$_SERVER['REQUEST_URI']);
                         exit;
                     } else if (strstr($_SERVER['REQUEST_URI'], '.css')
-                        && file_exists(__DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'src'.DIRECTORY_SEPARATOR.'plugins'.DIRECTORY_SEPARATOR.$sPlugin.DIRECTORY_SEPARATOR.'public'.preg_replace('/\.css/', '.less', $_SERVER['REQUEST_URI']))) {
+                        && file_exists(__DIR__ . DIRECTORY_SEPARATOR .DIRECTORY_SEPARATOR.'src'.DIRECTORY_SEPARATOR.'plugins'.DIRECTORY_SEPARATOR.$sPlugin.DIRECTORY_SEPARATOR.'public'.preg_replace('/\.css/', '.less', $_SERVER['REQUEST_URI']))) {
 
-                        Less::toCss(__DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'src'.DIRECTORY_SEPARATOR.'plugins'.DIRECTORY_SEPARATOR.$sPlugin.DIRECTORY_SEPARATOR.'public'.preg_replace('/\.css/', '.less', $_SERVER['REQUEST_URI']));
+                        Less::toCss(__DIR__ . DIRECTORY_SEPARATOR .DIRECTORY_SEPARATOR.'src'.DIRECTORY_SEPARATOR.'plugins'.DIRECTORY_SEPARATOR.$sPlugin.DIRECTORY_SEPARATOR.'public'.preg_replace('/\.css/', '.less', $_SERVER['REQUEST_URI']));
                         exit;
                     } else if (strstr($_SERVER['REQUEST_URI'], '.js')
-                        && file_exists(__DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'src'.DIRECTORY_SEPARATOR.'plugins'.DIRECTORY_SEPARATOR.$sPlugin.DIRECTORY_SEPARATOR.'public'.preg_replace('/\.js/', '.ts', $_SERVER['REQUEST_URI']))) {
+                        && file_exists(__DIR__ . DIRECTORY_SEPARATOR .DIRECTORY_SEPARATOR.'src'.DIRECTORY_SEPARATOR.'plugins'.DIRECTORY_SEPARATOR.$sPlugin.DIRECTORY_SEPARATOR.'public'.preg_replace('/\.js/', '.ts', $_SERVER['REQUEST_URI']))) {
 
-                        Typescript::toJs(__DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'src'.DIRECTORY_SEPARATOR.'plugins'.DIRECTORY_SEPARATOR.$sPlugin.DIRECTORY_SEPARATOR.'public'.preg_replace('/\.js/', '.ts', $_SERVER['REQUEST_URI']));
+                        Typescript::toJs(__DIR__ . DIRECTORY_SEPARATOR .DIRECTORY_SEPARATOR.'src'.DIRECTORY_SEPARATOR.'plugins'.DIRECTORY_SEPARATOR.$sPlugin.DIRECTORY_SEPARATOR.'public'.preg_replace('/\.js/', '.ts', $_SERVER['REQUEST_URI']));
                         exit;
                     }
                 }
@@ -187,7 +187,7 @@ class Router implements LoggerAwareInterface
 
                             exit;
                         } else if (isset($oHost->routes)) {
-    
+
                             foreach ($oHost->routes as $sKey => $oRoute) {
 
                                 $mReturn = $this->_route($oRoute, $_SERVER['REQUEST_URI']);
@@ -414,7 +414,7 @@ class Router implements LoggerAwareInterface
 
             $this->_oSecurity = new Security;
 
-            if (!$this->_oSecurity->checkSecurity() !== null) { return 403; }
+            if (!$this->_oSecurity->checkSecurity() !== false) { return 403; }
 
             // create the $_GET by the URL
 
@@ -684,6 +684,7 @@ class Router implements LoggerAwareInterface
      */
     private function _getPage403()
     {
+		var_dump(debug_backtrace());
         header("HTTP/1.0 403 Forbidden");
 
         if (isset($this->_oRoutes->e403)) {

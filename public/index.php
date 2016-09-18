@@ -15,9 +15,9 @@ declare(strict_types = 1);
 error_reporting(E_ALL);
 ini_set('display_error', '1');
 
-set_include_path(get_include_path().PATH_SEPARATOR.str_replace('public', 'bundles', __DIR__));
+set_include_path(get_include_path().PATH_SEPARATOR.str_replace('public', 'bundles', __DIR__).PATH_SEPARATOR.str_replace('public', 'kernel', __DIR__));
 
-require 'conf/AutoLoad.php';
+require 'AutoLoad.php';
 
 \Venus\lib\Debug::activateDebug();
 

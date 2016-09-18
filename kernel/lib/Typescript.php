@@ -59,6 +59,6 @@ class Typescript
 	    }
 	    
         header("content-type:text/javascript");
-        return file_get_contents(__DIR__.'../../'.CACHE_DIR.$sFolder.'/'.$aFile['filename'].'.js');
+        return file_get_contents(__DIR__ . '../../' .$aFile['filename'].'.js');
 	}
 }

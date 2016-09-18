@@ -102,7 +102,7 @@ class Input extends Common
      * @access public
      * @return string
      */
-    public function getValue() : string
+    public function getValue()
     {
         return $this->_sValue;
     }
@@ -114,7 +114,7 @@ class Input extends Common
      * @param  string $sValue Value of input;
      * @return \Venus\lib\Form\Input
      */
-    public function setValue(string $sValue) : Input
+    public function setValue(string $sValue = null) : Input
     {
         $this->_sValue = $sValue;
         return $this;

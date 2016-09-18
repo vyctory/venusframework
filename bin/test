@@ -15,7 +15,7 @@
 error_reporting(E_ALL);
 ini_set('display_error', 'on');
 
-require 'bundles/conf/AutoLoad.php';
+require 'kernel/AutoLoad.php';
 
 $oRouter = new \Venus\core\Router();
 $oRouter->run();

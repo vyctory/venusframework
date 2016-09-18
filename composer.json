@@ -1,7 +1,7 @@
 {
   "name": "vyctory/venusframework",
   "license": "MIT",
-  "version": "2.9.3",
+  "version": "2.9.4",
   "type": "Framework",
   "description": "Framework in PHP",
   "keywords": ["Framework", "php"],

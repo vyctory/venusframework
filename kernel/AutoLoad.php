@@ -42,6 +42,9 @@ spl_autoload_register(function (string $sClassName)
         $sFileClassName = preg_replace('#bundles//src/([^/]+)#', 'bundles/src/$1/app', $sFileClassName);
         $sFileClassName = str_replace('app\\app', 'app', $sFileClassName);
         $sFileClassName = str_replace('app/app', 'app', $sFileClassName);
+		$sFileClassName = preg_replace('#[/\\\\]app.php#', '.php', $sFileClassName);
+        $sFileClassName = str_replace('kernelsrc', 'bundles\\src', $sFileClassName);
+        $sFileClassName = preg_replace('#kernel([lc][io][br])#', 'kernel\\\\$1', $sFileClassName);
 
         if (strstr($sFileName, 'Venus\\') && file_exists($sFileClassName)) {
 
@@ -49,8 +52,14 @@ spl_autoload_register(function (string $sClassName)
         }
     }
     else {
+	
+        $sFileName = str_replace('/app.php', '.php', $sFileName);
 
-        if (strstr($sFileName, 'Venus\\') && file_exists(preg_replace('#^(src/[a-zA-Z0-9_]+/)#', '$1app/', str_replace(['\\', '/'], '/', str_replace('conf', '', __DIR__).str_replace('Venus\\', '', $sFileName))))) {
+        if (strstr($sFileName, 'Venus\\') && file_exists(preg_replace('#kernel([cl][oi][rb])#', 'kernel/$1', str_replace(['\\', '/'], '/', str_replace('conf', '', __DIR__).str_replace('Venus\\', '', $sFileName))))) {
+
+            require preg_replace('#kernel([cl][oi][rb])#', 'kernel/$1', str_replace(['\\', '/'], '/', str_replace('conf', '', __DIR__).str_replace('Venus\\', '', $sFileName)));
+
+        } elseif (strstr($sFileName, 'Venus\\') && file_exists(preg_replace('#^(src/[a-zA-Z0-9_]+/)#', '$1app/', str_replace(['\\', '/'], '/', str_replace('conf', '', __DIR__).str_replace('Venus\\', '', $sFileName))))) {
 
             require preg_replace('#^(src/[a-zA-Z0-9_]+/)#', '$1app/', str_replace(['\\', '/'], '/', str_replace('conf', '', __DIR__).str_replace('Venus\\', '', $sFileName)));
         }
@@ -61,9 +70,9 @@ spl_autoload_register(function (string $sClassName)
  * Load the composer autoload
  */
 
-if (file_exists(preg_replace('#bundles[/\\\\]conf#', '', __DIR__).'vendor/autoload.php')) {
+if (file_exists(preg_replace('#kernel#', '', __DIR__).'vendor/autoload.php')) {
 
-    include preg_replace('#bundles[/\\\\]conf#', '', __DIR__).'vendor/autoload.php';
+    include preg_replace('#kernel#', '', __DIR__).'vendor/autoload.php';
 }
 
 /**
@@ -78,6 +87,6 @@ if (isset($oConfig) && isset($oConfig->autoload)) {
     
     foreach ($oAutoloadConf as $sFile) {
     
-        require __DIR__.'/../'.$sFile;
+        require __DIR__ . '/bundles/' .$sFile;
     }
 }

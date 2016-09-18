@@ -215,7 +215,7 @@ class Debug extends AbstractLogger
         self::_initLogFile();
         self::$_bActivateException = true;
 
-        set_exception_handler(function (\Exception $oException)
+        set_exception_handler(function ($oException)
         {
             $aContext = array('file' => $oException->getFile(), 'line' => $oException->getLine());
             self::getInstance()->critical($oException->getMessage(), $aContext);
@@ -424,7 +424,7 @@ class Debug extends AbstractLogger
      */
     private static function _initLogFile()
     {
-        self::$_sFileLog = str_replace(DIRECTORY_SEPARATOR.'bundles'.DIRECTORY_SEPARATOR.'lib', '', __DIR__).DIRECTORY_SEPARATOR.
+        self::$_sFileLog = str_replace(DIRECTORY_SEPARATOR.'kernel'.DIRECTORY_SEPARATOR.'lib', '', __DIR__).DIRECTORY_SEPARATOR.
             "data".DIRECTORY_SEPARATOR."log".DIRECTORY_SEPARATOR."php-error.log";
 
         ini_set("log_errors", 1);

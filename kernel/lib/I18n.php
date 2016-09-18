@@ -45,9 +45,9 @@ class I18n extends CoreI18n
         
         foreach (Config::get('Plugins')->list as $iKey => $sPlugin) {
             
-            if (file_exists(__DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'src'.DIRECTORY_SEPARATOR.'plugins'.DIRECTORY_SEPARATOR.$sPlugin.DIRECTORY_SEPARATOR.'i18n'.DIRECTORY_SEPARATOR.$this->getLanguage().$this->getIntermediaiteDirectory().$sPlugin.'.json')) {
+            if (file_exists(__DIR__ . DIRECTORY_SEPARATOR .DIRECTORY_SEPARATOR.'src'.DIRECTORY_SEPARATOR.'plugins'.DIRECTORY_SEPARATOR.$sPlugin.DIRECTORY_SEPARATOR.'i18n'.DIRECTORY_SEPARATOR.$this->getLanguage().$this->getIntermediaiteDirectory().$sPlugin.'.json')) {
 
-                $oJson = json_decode(file_get_contents(__DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'src'.DIRECTORY_SEPARATOR.'plugins'.DIRECTORY_SEPARATOR.$sPlugin.DIRECTORY_SEPARATOR.'i18n'.DIRECTORY_SEPARATOR.$this->getLanguage().$this->getIntermediaiteDirectory().$sPlugin.'.json'));
+                $oJson = json_decode(file_get_contents(__DIR__ . DIRECTORY_SEPARATOR .DIRECTORY_SEPARATOR.'src'.DIRECTORY_SEPARATOR.'plugins'.DIRECTORY_SEPARATOR.$sPlugin.DIRECTORY_SEPARATOR.'i18n'.DIRECTORY_SEPARATOR.$this->getLanguage().$this->getIntermediaiteDirectory().$sPlugin.'.json'));
                 
                 $fCallBack = function($sValue) use ($oJson)
                 {    

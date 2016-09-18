@@ -67,7 +67,7 @@ class Label extends Common
 	 * @param  string $sLabel Label of input;
 	 * @return \Venus\lib\Form\Input
 	 */
-	public function setLabel(string $sLabel) : Input
+	public function setLabel(string $sLabel = null) : Label
 	{
 		$this->_sLabel = $sLabel;
 		return $this;
