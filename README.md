@@ -24,8 +24,8 @@ Pour afficher Hello World, voici le Vhost apache Type à mettre en place :
 <pre>
 &lt;VirtualHost *:80&gt;
      ServerName localhost
-     DocumentRoot E:/venus/public/Demo/
-     &lt;Directory E:/venus/public/Demo/&gt;
+     DocumentRoot E:/venus/public/
+     &lt;Directory E:/venus/public/&gt;
          DirectoryIndex index.php
          AllowOverride All
          Order allow,deny
@@ -45,8 +45,8 @@ To display Hello World in your browser, there is Vhost apache to write in your a
 <pre>
 &lt;VirtualHost *:80&gt;
      ServerName localhost
-     DocumentRoot E:/venus/public/Demo/
-     &lt;Directory E:/venus/public/Demo/&gt;
+     DocumentRoot E:/venus/public/
+     &lt;Directory E:/venus/public/&gt;
          DirectoryIndex index.php
          AllowOverride All
          Order allow,deny
