@@ -146,7 +146,7 @@ class Form
         } else if ($mType === 'text' || $mType === 'submit' || $mType === 'password' || $mType === 'file' || $mType === 'tel'
             || $mType === 'url' || $mType === 'email' || $mType === 'search' || $mType === 'date' || $mType === 'time'
             || $mType === 'datetime' || $mType === 'month' || $mType === 'week' || $mType === 'number' || $mType === 'range'
-            || $mType === 'color') {
+            || $mType === 'color' || $mType === 'hidden') {
 
             $this->_aElement[$sName] = new Input($sName, $mType, $sLabel, $mValue);
         } elseif ($mType === 'textarea') {

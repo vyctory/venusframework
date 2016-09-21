@@ -1,25 +1,46 @@
-<!doctype>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <style>
-            body{
-                font-family: arial;font-size:12px;
-            }
-        </style>
-    </head>
-    <body>
-        <h1>Mon premier bundle</h1>
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <meta charset="UTF-8">
+    <title>Mon premier bundle sur Venus Framework</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+</head>
+<body>
+<section class="page-header">
+    <h1 class="project-name">Mon premier bundle sur Venus</h1>
+    <h2 class="project-tagline">Venus Framework est un framework PHP</h2>
+    <a href="https://github.com/vyctory/venusframework" class="btn">Vu sur GitHub</a>
+    <a href="https://github.com/vyctory/venusframework/zipball/master" class="btn">Télécharger .zip</a>
+    <a href="https://github.com/vyctory/venusframework/tarball/master" class="btn">Télécharger .tar.gz</a>
+</section>
+
+<section class="main-content">
+    <h3>
+        <a id="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages" aria-hidden="true">
+            <span aria-hidden="true" class="octicon octicon-link"></span>
+        </a>Mon premier bundle</h3>
+
         <a href="index.html">[précédent]</a><br/><br/>
-        Si le framework proposer un premier bundle Demo, je vous conseille de créer un nouveau bundle en utilisant la
-        ligne de commande comme ceci :
+        Si le framework propose un premier bundle Demo, je vous conseille de créer un nouveau bundle en utilisant la
+        ligne de commande comme ceci :<br/><br/>
 
-        <pre>
-            php bin/console generate:bundle -p MonBundle
-        </pre>
+        <pre>php bin/console generate:bundle -p MonBundle</pre>
 
-        ...<br/><br/>
+        Sachez que si vous avez un troude mémoire, vous pouvez rien mettre aucun paramètre à la ligne de commande pour
+        avoir la liste des commandes proposées par Venus Framework voire les script que vosu aurez rajouté vous-même :
+        <br/><br/>
 
-        <a href="mon-premier-bundle.html">[suivant]</a>
+        <pre>php bin/console</pre>
+
+        Si vous mettez partiellement une commande qui n'existe pas, Venus Framework saura vous proposer des alternatives
+        qui pourraient vous aider à trouver le script désiré :<br/><br/>
+
+        <pre>php bin/console scaffolding</pre>
+
+        <a href="routeur.html">[suivant]</a>
     </body>
 </html>

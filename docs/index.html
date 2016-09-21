@@ -38,12 +38,19 @@
      Order allow,deny
      Allow from all
 &lt;/Directory&gt;
-&lt;/VirtualHost&gt;
-        </pre>
+&lt;/VirtualHost&gt;</pre>
+
         N'oubliez pas de redémarrer Apache pour que les modifications soient prises en compte.<br/><br/>
-        Vous pouvez également utiliser le serveur interne proposé par Venus en faisant php bin/console server:run
-        <br/><br/>
-        Pour vori votre page, vous pouvez à présent faire http://localhost/ dans votre navigateur Internet.<br/><br/>
+        Vous pouvez également utiliser le serveur interne proposé par Venus en faisant ceci :<br/><br/>
+
+        <pre>php bin/console server:run</pre>
+
+        Pour voir votre page, vous pouvez à présent faire http://localhost/ dans votre navigateur Internet.<br/><br/>
+        Vous pouvez également préciser le host de votre choix ainsi que le port car certaines configurations exigent de
+        passer par le port 8000 par exemple. Voici comment lancer ce serveur en ligne de commande :<br/><br/>
+
+        <pre>php bin/console server:run -h localhost:8000</pre>
+
         <a href="mon-premier-bundle.html">[suivant]</a>
     </body>
 </html>

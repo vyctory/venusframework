@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <meta charset="UTF-8">
+    <title>Le routeur sur Venus Framework</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+</head>
+<body>
+<section class="page-header">
+    <h1 class="project-name">Le routeur sur Venus</h1>
+    <h2 class="project-tagline">Venus Framework est un framework PHP</h2>
+    <a href="https://github.com/vyctory/venusframework" class="btn">Vu sur GitHub</a>
+    <a href="https://github.com/vyctory/venusframework/zipball/master" class="btn">Télécharger .zip</a>
+    <a href="https://github.com/vyctory/venusframework/tarball/master" class="btn">Télécharger .tar.gz</a>
+</section>
+
+<section class="main-content">
+    <h3>
+        <a id="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages" aria-hidden="true">
+            <span aria-hidden="true" class="octicon octicon-link"></span>
+        </a>Le routeur</h3>
+
+        <a href="mon-premier-bundle.html">[précédent]</a><br/><br/>
+
+        Le .htaccess est la base du routeur de notre framework. Il va router toutes les demandes vers le bootstrap
+        (fichier de lancement) index.php du framework. Cependant, si un des fichiers demandés existent (comme une image
+        par exemple), il retournera le contenu du fichier. Nous vous recommandons d’ailleurs de ne pas créer un autre
+        fichier dynamique (type PHP) et de toujours travailler au sein du framework.<br/><br/>
+
+        <pre>
+RewriteEngine on
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^.*$ /index.php [NC,L]</pre>
+
+        Le bootstrap lance le routeur du framework qui s’occupera d’appeler les méthodes nécessaires pour le bon
+        fonctionnement de votre application.<br/><br/>
+        Le routeur ne fait que respecter ce que vous lui définissez dans les fichiers de configuration. De base, le
+        framework vous propose une configuration pour notre projet Demo :<br/><br/>
+
+        <pre>
+{
+    "localhost" : {
+        "routes": {
+            "home": {
+                "route": "/",
+                "controller" : "\\Venus\\src\\Demo\\Controller\\Home",
+                "action": "show"
+            }
+        }
+    }
+}</pre>
+
+        Les fichiers de configurations sont des fichiers Json. Vous pouvez d’ailleurs les faire valider sur ce site lors
+        de vos modifications car l’erreur est très rapide : http://jsonlint.com/<br/><br/>
+        « Localhost » est le domaine de votre application (ou la base). Vous pouvez également faire « localhost/demo ».
+        <br/><br/>
+        Dans notre fichier, nous définissons ensuite nos routes.<br/><br/>
+        « home » est un simple alias qui sera cependant important car il permettra de créer des liens dynamiquement sur
+        vos applications.<br/><br/>
+        « route » permet de définir l’URL a appeler pour lancer une action. Nous verrons plus tard, qu’il est possible
+        de créer des URL dynamique.<br/><br/>
+        « controller » permet de définir la classe qui contiendra l’action à enclencher (le nommage respecte les
+        namespace du framework. Même si cette méthode est assez ouverte, il est recommandé de suivre les normes de
+        nommage comme vous le voyez dans l’exemple.<br/><br/>
+        « action » permet de définir l’action (en gros la méthode de la classe) à déclencher.<br/><br/>
+        Vous pouvez aller voir le fichier /Venus/bundles/src/Demo/app/Controller/Home.php et la méthode show() pour
+        voir comment le framework affiche un simple Hello World.<br/><br/>
+
+
+    <h3>
+        <a id="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages" aria-hidden="true">
+            <span aria-hidden="true" class="octicon octicon-link"></span>
+        </a>Routes avec des paramètres</h3>
+
+        Les routes peuvent être plus dynamiques et prendre en compte par exemple des paramètres :<br/><br/>
+
+    <pre>
+{
+    "localhost" : {
+        "routes": {
+            "home": {
+                "route": "/",
+                "controller" : "\\Venus\\src\\Demo\\Controller\\Home",
+                "action": "show",
+                "constraints": {
+                    "id": "[0-9]*"
+                }
+            }
+        }
+    }
+}</pre>
+
+        On a rajouté ici un paramètre id dans la « route » que l’on définit plus précisément dans les « constraints »
+        sous forme d’expression régulière. Il faudra également rajouter $id dans la méthode show(). Les paramètres sont
+        également automatiquement rajoutés dans le $_GET.<br/><br/>
+        Pour gérer une configuration alternative (pour un environnement de développement par exemple), vous pouvez créer
+        un fichier Route.conf-local qui d’ailleurs est prioritaire sur le fichier Route.conf.<br/><br/>
+        Il est possible de définir des GET par défaut car cela peut s’avérer très utile. Voici un exemple :<br/><br/>
+
+        <pre>
+{
+    "localhost" : {
+        "routes": {
+            "home": {
+                "route": "/",
+                "controller" : "\\Venus\\src\\Demo\\Controller\\Home",
+                "action": "show",
+                "defaults_constraints": {
+                    "id": 1
+                },
+                "constraints": {
+                    "id": "[0-9]*"
+                }
+            }
+        }
+    }
+}</pre>
+
+    <h3>
+        <a id="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages" aria-hidden="true">
+            <span aria-hidden="true" class="octicon octicon-link"></span>
+        </a>Routes complexes</h3>
+
+        Venus Framework est un framework MVC donc il propose un système de templating complexe. Cependant pour des pages
+        statiques, il permet de diriger une route directement vers un template pour omettre les phases MC.<br/><br/>
+        Voici comment écrire par exemple sa route :<br/><br/>
+
+    <pre>
+"template": {
+    "route": "/template/",
+    "template": "Demo",
+    "layout": false,
+    "content_type": "html"
+}</pre>
+
+        Nous allons créer également un fichier e:\venus\bundles\src\Demo\app\View\Demo.tpl avec du texte quelconque
+        dedans. Le « template » comprend automatiquement le lieu où chercher le template ainsi que l’extension .tpl de
+        celui-ci.<br/><br/>
+        Le « layout » permet d’automatiser la présence d’un layout. Pour ajouter ce Layout, il suffit de créer un
+        fichier e:\venus\bundles\src\Demo\app\View\Layout.tpl et d’ajouter cela à l’intérieur pour appeler le modèle
+        définit : {include file=$model}<br/><br/>
+        Vous pouvez ainsi tester de mettre true à « layout ».<br/><br/>
+        Dans une route il est possible également de préciser la méthode http utilisée : GET, POST, HEAD, PUT, DELETE,
+        TRACE, CONNECT pour créer des services full-rest par exemple.<br/><br/>
+
+        <pre>
+"test": {
+    "route": "/template/",
+    "template": "MenuManager",
+    "layout": true,
+    "content_type": "html",
+    "methods": "GET"
+}</pre>
+
+        Vous pouvez également mettre du cache sur la page qui permettra d’indiquer le temps de vie de celle-ci.
+        <br/><br/>
+
+        <pre>
+"test": {
+    "route": "/template/",
+    "template": "MenuManager",
+    "layout": true,
+    "content_type": "html",
+    "cache_max_age": 100
+}</pre>
+
+        Pour mettre en place des pages en https, vous pouvez également indiquer que la page sera en HTTPS :<br/><br/>
+
+        <pre>
+"test": {
+    "route": "/template/",
+    "template": "MenuManager",
+	"layout": true,
+	"content_type": "html",
+	"schemes": "https"
+}</pre>
+
+    <a href="mon-premier-bundle.html">[suivant]</a>
+    </body>
+</html>

@@ -222,12 +222,24 @@ class Router implements LoggerAwareInterface
                 $sBatchName = "phpunit";
                 $aArguments[0] = "bin/console";
                 $aArguments[1] = "phpunit";
+
             } else if (isset($aArguments[1])) {
+
                 $sBatchName = $aArguments[1];
-            }
-            else {
+
+            } else {
+
                 $aArguments[1] = 'help';
                 $sBatchName = $aArguments[1];
+            }
+
+            if (!isset(Config::get('Route')->batch->script->{$sBatchName})) {
+
+                $exBatchName = $aArguments[1];
+                $sBatchName = 'search';
+                $aArguments[1] = 'search';
+                $aArguments[2] = '-s';
+                $aArguments[3] = $exBatchName;
             }
 
             if (isset(Config::get('Route')->batch->script->{$sBatchName})) {
