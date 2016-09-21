@@ -154,7 +154,22 @@ $oForm = $this->form
               ->getForm();
         </pre>
 
-        Le formulaire n’acceptera pas d’avoir un utilisateur vide et retournera une exception.
+        Le formulaire n’acceptera pas d’avoir un utilisateur vide et retournera une exception.<br/><br/>
+        <h2>Type de champs</h2>
+        Voici le type de champ existant des formulaires dans venus Framework :<br/><br/>
+        ->add($name, $type, $label, $value) => le types possibles pour des champs input sont  : text, submit, password,
+        file, tel, url, email, search, date, time, datetime, month, week, number, color et range. L'affichage se
+        modifier selon le navigateur utilisé et sa façon d'interpréter l'html 5.<br/><br/>
+        ->add($name, 'textarea', $label, $value) => permet de créer un textarea classique<br/><br/>
+        ->add($name, 'select', $label, $value, $listOption) => permet de créer un champ select avec un tableau d'option
+        de type array("1"=>1, "2"=>2).<br/><br/>
+        ->add($name, 'label') => permet de créer un label pour votre formulaire<br/><br/>
+        ->add($name, 'list_checkbox', $label, $values, $valueChecked) => permet de créer une liste complète de bouton
+        checkbox avec le ^values qui est un tableau qui permet de définir chaque bouton. Le tableau sera sous la forme
+        array('homme' => 'h', 'femme' => 'f').<br/><br/>
+        ->add($name, 'checkbox', $label, $value, $valueChecked) => permet de créer un bouton checkbox.<br/><br/>
+        ->add($name, 'radio', $label, $value, $valueChecked) => permet de créer un bouton radio.<br/><br/>
+
 
         <a href="les_caches.html">[suivant]</a>
     </body>

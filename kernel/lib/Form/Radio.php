@@ -72,7 +72,7 @@ class Radio extends Common
 	 * @param  string $sValueChecked value checked of radio
 	 * @return \Venus\lib\Form\Input
 	 */
-	public function __construct(string $sName, string $sLabel, string $sValue, string $sValueChecked = null)
+	public function __construct(string $sName, string $sLabel, string $sValue = null, string $sValueChecked = null)
 	{
 		$this->setName($sName);
 		$this->setValue($sValue);
@@ -86,7 +86,7 @@ class Radio extends Common
 	 * @access public
 	 * @return string
 	 */
-	public function getValue() : string
+	public function getValue()
 	{
 		return $this->_sValue;
 	}
@@ -98,7 +98,7 @@ class Radio extends Common
 	 * @param  string $sValue Value of input;
 	 * @return Radio
 	 */
-	public function setValue(string $sValue) : Radio
+	public function setValue(string $sValue = null) : Radio
 	{
 		$this->_sValue = $sValue;
 		return $this;
@@ -110,7 +110,7 @@ class Radio extends Common
 	 * @access public
 	 * @return string
 	 */
-	public function getValueChecked() : string
+	public function getValueChecked()
 	{
 		return $this->_sValueChecked;
 	}
@@ -122,7 +122,7 @@ class Radio extends Common
 	 * @param  string $sValueChecked Value of input;
 	 * @return Radio
 	 */
-	public function setValueChecked(string $sValueChecked) : Radio
+	public function setValueChecked(string $sValueChecked = null) : Radio
 	{
 		$this->_sValueChecked = $sValueChecked;
 		return $this;

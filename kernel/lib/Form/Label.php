@@ -47,6 +47,7 @@ class Label extends Common
 	public function __construct(string $sLabel)
 	{
 		$this->setLabel($sLabel);
+        $this->setName('');
 	}
 
 	/**

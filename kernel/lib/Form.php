@@ -174,43 +174,6 @@ class Form
         } else  if ($mType === 'radio') {
 
             $this->_aElement[$sName.rand(100000, 999999)] = new Radio($sName, $sLabel, $mValue, $mOptions);
-        } else  if ($mType === 'date') {
-
-            $aDay = array();
-
-            for ($i = 1; $i <= 31; $i++) {
-
-                if ($i < 10) { $aDay['0'.$i] = '0'.$i; }
-                else { $aDay[$i] = $i; }
-            }
-
-            $this->_aElement[$sName.'_day'] = new Select($sName, $aDay);
-
-            $aMonth = array(
-                '01' => 'Jan',
-                '02' => 'Feb',
-                '03' => 'Mar',
-                '04' => 'Apr',
-                '05' => 'May',
-                '06' => 'Jun',
-                '07' => 'Jui',
-                '08' => 'Aug',
-                '09' => 'Sep',
-                '10' => 'Oct',
-                '11' => 'Nov',
-                '12' => 'Dec',
-            );
-
-            $this->_aElement[$sName.'_month'] = new Select($sName, $aMonth);
-
-            $aYear = array();
-
-            for ($i = 1900; $i <= 2013; $i++) {
-
-                $aYear[$i] = $i;
-            }
-
-            $this->_aElement[$sName.'_year'] = new Select($sName, $aMonth);
         }
 
         return $this;

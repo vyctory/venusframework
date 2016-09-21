@@ -148,12 +148,15 @@ class Container
             $oEntity->save();
         } else if ($this->_oForm->getSynchronizeEntity() !== null && isset($aRequest) && count($aRequest) > 0) {
 
-            $oEntity = new $this->_oForm->_sSynchronizeEntity;
+            $sClassName = $this->_oForm->getSynchronizeEntity();
+            $oEntity = new $sClassName;
 
             foreach ($this->_oForm->getElement() as $sKey => $sValue) {
 
-                $sMethodName = 'set_'.$sValue->getName().'';
-                call_user_func_array(array(&$oEntity, $sMethodName), array($aRequest[$sValue->getName()]));
+                if ($sValue->getName()) {
+                    $sMethodName = 'set_' . $sValue->getName() . '';
+                    call_user_func_array(array(&$oEntity, $sMethodName), array($aRequest[$sValue->getName()]));
+                }
             }
 
             $this->_oForm->setIdEntityCreated($oEntity->save());
@@ -226,11 +229,14 @@ class Container
      */
     private function _validate($oElement) : bool
     {
-        foreach ($oElement->getConstraint() as $oConstraint) {
+        if (is_array($oElement->getConstraint())) {
 
-            if (!$oConstraint->validate($_POST[$oElement->getName()])) {
+            foreach ($oElement->getConstraint() as $oConstraint) {
 
-                return false;
+                if (!$oConstraint->validate($_POST[$oElement->getName()])) {
+
+                    return false;
+                }
             }
         }
 

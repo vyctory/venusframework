@@ -43,10 +43,11 @@ spl_autoload_register(function (string $sClassName)
         $sFileClassName = str_replace('app\\app', 'app', $sFileClassName);
         $sFileClassName = str_replace('app/app', 'app', $sFileClassName);
 		$sFileClassName = preg_replace('#[/\\\\]app.php#', '.php', $sFileClassName);
-        $sFileClassName = str_replace('kernelsrc', 'bundles\\src', $sFileClassName);
-        $sFileClassName = preg_replace('#kernel([lc][io][br])#', 'kernel\\\\$1', $sFileClassName);
+        $sFileClassName = str_replace('kernelsrc', 'bundles'.DIRECTORY_SEPARATOR.'src', $sFileClassName);
+        $sFileClassName = preg_replace('#kernel([lc][io][br])#', 'kernel'.DIRECTORY_SEPARATOR.DIRECTORY_SEPARATOR.'$1', $sFileClassName);
+        $sFileClassName = str_replace(DIRECTORY_SEPARATOR.DIRECTORY_SEPARATOR, DIRECTORY_SEPARATOR, $sFileClassName);
 
-        if (strstr($sFileName, 'Venus\\') && file_exists($sFileClassName)) {
+		if (strstr($sFileName, 'Venus\\') && file_exists($sFileClassName)) {
 
         	require $sFileClassName;
         }

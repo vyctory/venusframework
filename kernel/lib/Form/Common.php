@@ -52,7 +52,7 @@ abstract class Common
 	 * @access public
 	 * @return string
 	 */
-	public function getName() : string
+	public function getName()
 	{
 		return $this->_sName;
 	}
@@ -95,9 +95,9 @@ abstract class Common
 	 * get the constraint
 	 *
 	 * @access public
-	 * @return array
+	 * @return array|null
 	 */
-	public function getConstraint() : array
+	public function getConstraint()
 	{
 		return $this->_aConstraints;
 	}
