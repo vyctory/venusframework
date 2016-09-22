@@ -1,7 +1,7 @@
 {
   "name": "vyctory/venusframework",
   "license": "MIT",
-  "version": "2.9.7",
+  "version": "2.9.8",
   "type": "Framework",
   "description": "Framework in PHP",
   "keywords": ["Framework", "php"],
@@ -18,8 +18,9 @@
   },
   "require": {
     "php": ">=7.0.0",
-    "las93/apollina2": "2.0.3-alpha",
+    "vyctory/apollina-template": "*",
     "vyctory/attila-orm": "*",
+    "vyctory/venus-batch": "*",
     "mobiledetect/mobiledetectlib": "*"
   },
   "require-dev": {

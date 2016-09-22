@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <meta charset="UTF-8">
+    <title>Système de templating sur Venus Framework</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+</head>
+<body>
+<section class="page-header">
+    <h1 class="project-name">Système de templating sur Venus</h1>
+    <h2 class="project-tagline">Venus Framework est un framework PHP</h2>
+    <a href="https://github.com/vyctory/venusframework" class="btn">Vu sur GitHub</a>
+    <a href="https://github.com/vyctory/venusframework/zipball/master" class="btn">Télécharger .zip</a>
+    <a href="https://github.com/vyctory/venusframework/tarball/master" class="btn">Télécharger .tar.gz</a>
+</section>
+
+<section class="main-content">
+
+    <a href="attila.html">[précédent]</a>
+
+    <h3>
+        <a id="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages" aria-hidden="true">
+            <span aria-hidden="true" class="octicon octicon-link"></span>
+        </a>Système de templating</h3>
+
+    Un template, outil efficace pour tout framework, a pour but de dissocier l’affichage et la gestion de donnée. Il
+    propose cependant des options dynamiques afin de proposer un maximum de flexibilité tout en gardant une séparation
+    propre.<br/><br/>
+    Voici le template de notre exemple précédent : e:/venus/bundles/src/Demo/app/View/Exemple1.tpl<br/><br/>
+
+    <pre>
+{foreach from=$Exemple key=$iKey item=$oExemple}
+
+	{$oExemple->get_title()} - {$oExemple->get_id()}
+
+{/foreach}</pre>
+
+    Le système de templating utilisé par Venus s'appelle Apollina et est similaire au système de templating Smarty ou
+    Twig. Nous n'allons traiter que des spécificités dans cette documentation mais n'hésitez pas à vous référer à la
+    documentation officielle : <a href="https://vyctory.github.io/apollina-template/index.html">Documentation officielle</a>.
+    <br/><br/>
+
+    Notre template contient de l’HTML et un balisage particulier permettant de boucler sur les deux exemples que l’on a
+    insérés en base.<br/><br/>
+
+    <a href="xxxx.html">[suivant]</a>
+</body>
+</html>

@@ -1,26 +1,133 @@
-<!doctype>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <style>
-            body{
-                font-family: arial;font-size:12px;
-            }
-        </style>
-    </head>
-    <body>
-        <h1>Les caches</h1>
-        <a href="les_autoloaders.html">[précédent]</a><br/><br/>
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <meta charset="UTF-8">
+    <title>Les contrôlleurs sur Venus Framework</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+</head>
+<body>
+<section class="page-header">
+    <h1 class="project-name">Les contrôlleurs sur Venus</h1>
+    <h2 class="project-tagline">Venus Framework est un framework PHP</h2>
+    <a href="https://github.com/vyctory/venusframework" class="btn">Vu sur GitHub</a>
+    <a href="https://github.com/vyctory/venusframework/zipball/master" class="btn">Télécharger .zip</a>
+    <a href="https://github.com/vyctory/venusframework/tarball/master" class="btn">Télécharger .tar.gz</a>
+</section>
 
-        Les contrôleurs ont deux triggers qui permettent d’être initialisé :<br/><br/>
-        1/ La fonction initialize permet d’initialiser le contrôleur la première fois qu’il est appelé et uniquement
-        cette fois-là pendant tout le déroulement du script :<br/><br/>
+<section class="main-content">
+
+    <a href="routeur.html">[précédent]</a>
+
+    <h3>
+        <a id="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages" aria-hidden="true">
+            <span aria-hidden="true" class="octicon octicon-link"></span>
+        </a>Les contrôlleurs</h3>
+
+        Pour le moment nous avons vu qu’un contrôleur simple qui affichait un Hello World.<br/><br/>
+        Comme dans de nombreux framework, le routeur va gérer la vue associée et le modèle (sous forme d’ORM complexe et
+        d’entité). Nous allons commencer par regarder notre fichier /app/Controller/Exemple1.php qui contient un exemple
+        d’appel de template.<br/><br/>
 
         <pre>
-public function initialize() { ; }
+class Exemple1 extends Controller {
+
+	/**
+	 * the main page
+	 *
+	 * @access public
+	 * @return void
+	 */
+
+	public function show() {
+
+		$aExemple = $this->model->get();
+
+		$this->view
+			 ->assigns('Exemple', $aExemple)
+			 ->display();
+	}
+)
         </pre>
 
-        2/ La fonction onConstruct permet d’initialiser le contrôleur à chaque fois qu’il est instancié :
+        Pour faire simple, la fonction appelle un modèle Exemple1 ($this->model est raccourcis vers le modèle du même
+        nom que le contrôleur) et ensuite on appelle la vue qui affiche la liste des Exemple1 qu’on a récupéré. Comme
+        pour le modèle, si on ne définit pas la vue à appeler, le framework va automatiquement appeler la vue du même
+        nom soit ici Exemple1.tpl.<br/><br/>
+        Pour tester en réel, ce code, il nous faut se connecter sur la base de donnée et de créer la table Exemple1
+        comme ceci :<br/><br/>
+
+        <pre>
+CREATE DATABASE demo
+
+CREATE TABLE `Exemple1` (
+     `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+     `title` varchar(150) NOT NULL,
+     PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1
+
+INSERT INTO  `demo`.`Exemple1` (`id` ,`title`) VALUES (NULL ,  'test1'), (NULL ,  'test2');</pre>
+
+        Le système propose du scaffolding mais nous verrons cela plus tard.<br/><br/>
+        Dès que cela est fait, il faut aller configurer la connexion de sa base de données dans le fichier
+        /src/Demo/app/conf/Db.conf pour mettre l’utilisateur et le passeport de la base de données.<br/><br/>
+
+        <pre>
+{
+    "configuration": {
+        "demo": {
+            "type": "mysql",
+            "host": "localhost",
+            "db": "demo",
+            "user": "root",
+            "password": "",
+            "tables": {
+                "Exemple1": {
+                    "fields": {
+                        "id": {
+                            "type": "int",
+                            "key": "primary",
+                            "null": false,
+                            "undefined": true,
+                            "autoincrement": true
+                        },
+                        "title": {
+                            "type": "varchar",
+                            "null": false
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+</pre>
+
+        <small>* Si vous changez de base, il faut impérativement modifier le bundles/conf/Const.php et le champ
+        « db_conf ».</small><br/><br/>
+        Comme vous pouvez d’ailleurs le voir, ce fichier vous permettra de créer l’ensemble des outils automatiquement à
+        l’avenir pour utiliser vos bases de données.<br/><br/>
+        Ajouter ensuite dans votre fichier de route, la nouvelle route pour tester ce contrôleur
+        /src/Demo/app/conf/Route.conf:<br/><br/>
+
+        <pre>
+"model": {
+    "route": "/model",
+    "controller" : "\\Venus\\src\\Demo\\Controller\\Exemple1",
+    "action": "show"
+}</pre>
+
+        Si vous avez réussi vous pourrez avoir dans votre navigateur :<br/><br/>
+
+        <pre>
+test1 - 1
+
+test2 - 2</pre>
+
+        2/ La fonction onConstruct permet d’initialiser le contrôleur à chaque fois qu’il est instancié :<br/><br/>
 
         <pre>
 public function onConstruct() { ; }
@@ -48,7 +155,7 @@ $this->di->get('mongo')->connect();
         </pre>
 
         Vous pouvez récupérer le contenu des POST envoyé par formulaire voire tester si il y a un POST envoyé de cette
-        façon :
+        façon :<br/><br/>
 
         <pre>
 if ($this->request->isPost() == true) {
@@ -58,14 +165,14 @@ if ($this->request->isPost() == true) {
         </pre>
 
         Dans un car très particulier comme par exemple lors de la création de web service en Rest, vous pouvez récupérer
-        le contenu du PUT :
+        le contenu du PUT :<br/><br/>
 
         <pre>
 $this->request->getPut();
         </pre>
 
         Dans Venus Framework, il faudra utiliser un objet Request pour aller chercher un grand nombre d’information
-        comme :
+        comme :<br/><br/>
 
         <pre>
 $A = new Request;
@@ -80,7 +187,7 @@ $A->server->get(‘name’) => pour chercher le $_SERVER[‘name’];
         Toutes ces méthodes sont utilisées de manières identiques et autorisent également un deuxième paramètre qui est
         la valeur par défaut retournée si le paramètre n’est pas défini.<br/><br/>
         Venus vous propose 2 triggers sur les contrôleurs qui se lancent juste avant et juste après l’appel de
-        l’action :
+        l’action :<br/><br/>
 
         <pre>
     public function beforeExecuteRoute()
@@ -94,12 +201,12 @@ $A->server->get(‘name’) => pour chercher le $_SERVER[‘name’];
     }
         </pre>
 
-        Dans cette nouvelle version de Venus Framework, l’objet Response prend de l’importance.
+        Dans cette nouvelle version de Venus Framework, l’objet Response prend de l’importance.<br/><br/>
 
         <pre>
 $response = new \Venus\lib\Response();
 
-$response->setContent('<html><body>Hello World!</body></html>');
+$response->setContent('Hello World!');
 $response->setStatusCode(\Venus\lib\Response::HTTP_OK);
 $response->headers->set('content-Type', 'text/html');
 
@@ -109,6 +216,107 @@ $response->send();
         Ici, on envoie du contenu, on indique un numéro de statut, rajoutons un header HTML avant d’envoyer la totalité
         au navigateur avec send().
 
-        <a href="les_plugins.html">[suivant]</a>
+    <h3>
+        <a id="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages" aria-hidden="true">
+            <span aria-hidden="true" class="octicon octicon-link"></span>
+        </a>Notions avancées</h3>
+
+    Nous avions vu pour faire une action qui appelait un modèle/entité du même nom mais vous aurez besoin d’appeler
+    d’autres modèles/entités voire vous voudrez totalement dissocier le nom du controller aux noms des modèles/entités.
+    Cela sera probablement le cas quand vos controlleurs ne seront pas des API.
+    <br/><br/>
+    Nous allons ajouter l’utilisation d'un modèle news dans notre controller Exemple1 afin de bien comprendre la
+    rapidité et l’efficacité du framework (c’est notre méthode recommandée mais ce n’est pas la seule méthode possible).
+    Nous allons dans notre controller /bundles/src/Demo/app/Controller/Exemple1.php<br/><br/>
+    Nous commençons par rajouter l’alias « news » de la classe modèle en haut du fichier :<br/><br/>
+
+    <pre>
+namespace Venus\src\Demo\Controller;
+
+use \Venus\src\Demo\common\Controller as Controller;
+use \Venus\src\Demo\Model\news as news; </pre>
+
+    Ensuite nous créons notre raccourci d’accès au modèle dans le constructeur comme ceci :<br/><br/>
+
+    <pre>
+    public function __construct() {
+
+        $this->modelNews = function() { return new news; };
+
+        parent::__construct();
+    }</pre>
+
+    Ensuite il ne nous reste plus qu’à modifier notre action show pour appeler ce nouveau modèle :<br/><br/>
+
+    <pre>
+    public function show() {
+
+        $aExemple = $this->modelNews->get();
+
+        $this->view
+             ->assign('Exemple', $aExemple)
+             ->display();
+	}</pre>
+
+    Vous pouvez faire ceci directement dans le controlleur de common/ afin de donner accès à ce modèle à l'ensemble des
+    controlleurs de votre bundle.
+
+    <h3>
+        <a id="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages" aria-hidden="true">
+            <span aria-hidden="true" class="octicon octicon-link"></span>
+        </a>Des raccourcis</h3>
+
+    Les controllers proposent des raccourcis intéressants qui pourraient bien vous aider à accélérer vos développements.
+    Voici la liste de ceux-ci et les exemples associés.<br/><br/>
+    Redirect<br/><br/>
+    Vous pouvez créer une redirection http rapide (ou redirection interne en cli) comme ceci :<br/><br/>
+
+    <pre>
+$this->redirect($this->url->getUrl('home', array()));</pre>
+
+    Forward<br/><br/>
+    Vous pouvez créer une redirection vers une autre action comme ceci :<br/><br/>
+
+    <pre>
+$this->forward($this->url->getUrl('home', array()));</pre>
+
+    Attention : La redirection n’est pas au niveau http, donc il n’y a pas de redirection 301 mais juste que le
+    programme se dirige vers une autre action.<br/><br/>
+    Cache<br/><br/>
+    Vous pouvez cacher le développement d’un contrôleur en ajoutant un élément dans le PHPDoc de la méthode comme ceci :
+    <br/><br/>
+
+    <pre>
+    /**
+    * The main menu manager
+    *
+    * @access public
+    * @return void
+    *
+    * @Cache(maxage=12)
+    */
+
+    public function show() {</pre>
+
+    Raccourcis<br/><br/>
+    Voici des raccourcis automatiquement propose à tous les contrôleurs que nous verrons plus en détail par la suite :
+    <br/><br/>
+
+    <pre>
+$this->form = function() { return new Form(); };
+$this->security = function() { return new Security(); };
+$this->router = function() { return new Router; };
+$this->mail = function() { return new Mail; };
+$this->session = function() { return new Session; };
+$this->translator = function() { return new I18n; };</pre>
+
+    Vous pouvez automatiquement envoyer des erreurs HTTP dans les contrôleurs afin de gérer vous-mêmes des retours HTTP :
+    <br/><br/>
+
+    <pre>
+$this->NotFound();
+$this->Forbidden();</pre>
+
+    <a href="attila.html">[suivant]</a>
     </body>
 </html>
