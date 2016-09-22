@@ -1,25 +1,40 @@
-<!doctype>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <style>
-            body{
-                font-family: arial;font-size:12px;
-            }
-        </style>
-    </head>
-    <body>
-        <h1>Les formulaires</h1>
-        <a href="utilisation_des_modeles.html">[précédent]</a><br/><br/>
-        Venus permet de créer des formulaires dynamiques directement à partir du controller :
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <meta charset="UTF-8">
+    <title>Les formulaires sur Venus Framework</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+</head>
+<body>
+<section class="page-header">
+    <h1 class="project-name">Les formulaires sur Venus</h1>
+    <h2 class="project-tagline">Venus Framework est un framework PHP</h2>
+    <a href="https://github.com/vyctory/venusframework" class="btn">Vu sur GitHub</a>
+    <a href="https://github.com/vyctory/venusframework/zipball/master" class="btn">Télécharger .zip</a>
+    <a href="https://github.com/vyctory/venusframework/tarball/master" class="btn">Télécharger .tar.gz</a>
+</section>
+
+<section class="main-content">
+
+    <a href="les_configurations.html">[précédent]</a>
+
+    <h3>
+        <a id="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages" aria-hidden="true">
+            <span aria-hidden="true" class="octicon octicon-link"></span>
+        </a>Les formulaires</h3>
+
+        Venus permet de créer des formulaires dynamiques directement à partir du controller :<br/><br/>
 
         <pre>
 $oForm = $this->form
               ->add('name', 'text')
               ->add('validate', 'submit')
               ->synchronizeEntity('Venus\src\Helium\Entity\merchant')
-              ->getForm();
-        </pre>
+              ->getForm();</pre>
 
         On va créer un formulaire en ajoutant un champ texte et un bouton submit. Ensuite on indique l’entité qui doit
         se synchroniser avec le formulaire (sachant que les champs doivent avoir le nom des colonnes de la table).
@@ -27,31 +42,26 @@ $oForm = $this->form
         Si vous ajoutez un champ caché avec la clé primaire de la table, l’update sera automatique.<br/><br/>
         Le getForm() permet de récupérer un conteneur qui propose différentes méthodes utiles pour afficher le
         formulaire final ou réaliser d’autres opération.<br/><br/>
-        Dans l'ajout d'un champ, vous pouvez ajouter un label comme ceci :
+        Dans l'ajout d'un champ, vous pouvez ajouter un label comme ceci :<br/><br/>
 
-        <pre>
-            ->add('name', 'text', 'mon label')
-        </pre>
+        <pre>->add('name', 'text', 'mon label')</pre>
 
-        Dans l'ajout d'un champ, vous pouvez également ajouter une valeur par défaut :
+        Dans l'ajout d'un champ, vous pouvez également ajouter une valeur par défaut :<br/><br/>
 
-        <pre>
-            ->add('name', 'text', 'mon label', 'DEFAULT')
-        </pre>
+        <pre>->add('name', 'text', 'mon label', 'DEFAULT')</pre>
 
         Pour proposer un formulaire qui remplit automatiquement celui-ci afin de faire un update, il suffit de rajouter
-        l’id de la clé primaire désirée dans le synchronizeEntity :
+        l’id de la clé primaire désirée dans le synchronizeEntity :<br/><br/>
 
         <pre>
 $sForm = $this->form
               ->add('name', 'text')
               ->add('validate', 'submit')
               ->synchronizeEntity('Venus\src\Helium\Entity\merchant', 12)
-              ->getForm();
-        </pre>
+              ->getForm();</pre>
 
         Pour faire une lsite de sélection où $aFinalMerchant est un tableau de type array(id => name), nosu écriroons
-        ceci :
+        ceci :<br/><br/>
 
         <pre>
 		$oForm = $this->form
@@ -59,11 +69,10 @@ $sForm = $this->form
 				      ->add('id_merchant', 'select', 'Merchants', null, $aFinalMerchant)
 				      ->add('validate', 'submit')
 			          ->synchronizeEntity('Venus\src\Helium\Entity\user')
-			          ->getForm();
-        </pre>
+			          ->getForm();</pre>
 
         Exemple de formulaire avec une liste de champs à cocher directement créés par le framework avec le même
-        tableau :
+        tableau :<br/><br/>
 
         <pre>
 		$oForm = $this->form
@@ -71,21 +80,19 @@ $sForm = $this->form
 				      ->add('id_merchant', 'checkbox', 'Merchants', null, $aFinalMerchant)
 				      ->add('validate', 'submit')
 			          ->synchronizeEntity('Venus\src\Helium\Entity\user')
-			          ->getForm();
-        </pre>
+			          ->getForm();</pre>
 
         Le conteneur retourné par la fonction getForm() propose par exemple d’afficher le formulaire final en une seule
-        variable. Voici un exemple dans un contrôleur et dans un template :
+        variable. Voici un exemple dans un contrôleur et dans un template :<br/><br/>
 
         <pre>
             $this->view->assign(‘form’, $oForm->createView());      # dasn le controleur
             (et)
-            {$form->form}                                           # dans le template
-        </pre>
+            {$form->form}                                           # dans le template </pre>
 
         Pour sauvegarder le résultat, il faudra ajouter un $form->handleRequest(). Le synchronizeEntity() n’est pas
         obligatoire pour valider un formulaire. Par contre si vous faites un synchronizeEntity, le résultat ne
-        s’enregistrera qu’après avoir fait le $form->handleRequest() :
+        s’enregistrera qu’après avoir fait le $form->handleRequest() :<br/><br/>
 
         <pre>
 $oForm = $this->form
@@ -96,24 +103,22 @@ $oForm = $this->form
 			  ->getForm();
 
 $oForm->handleRequest();
-If ($oForm->isValid()) { /*résultats */ }
-        </pre>
+If ($oForm->isValid()) { /*résultats */ }</pre>
 
         Vous pouvez aussi tester si le formulaire a été soumis (sans en tester la validité) en utilisant la méthode
         $oForm->isSubmitted().<br/><br/>
         Vous pouvez tester le bouton submit qui a été cliqué (quand vous en mettez plusieurs) avec la méthode
         $oForm->isClicked(‘bouton_valid1’) ;<br/><br/>
-        Dans les templates, vous pouvez écrire tout le formulaire vous-même comme ceci :
+        Dans les templates, vous pouvez écrire tout le formulaire vous-même comme ceci :<br/><br/>
 
         <pre>
 {$form->form_start}
     {$form->form_row[‘name’]}
     {$form->form_row[‘firstname’]}
-{$form->form_end}
-        </pre>
+{$form->form_end}</pre>
 
         Pour renforcer la sécurité des formulaires, vous pouvez rajouter des contraintes.<br/><br/>
-        Venus 2 permet de faire des formulaires imbriqués comme ceci :
+        Venus 2 permet de faire des formulaires imbriqués comme ceci :<br/><br/>
 
         <pre>
 $oForm = $this->form
@@ -130,8 +135,7 @@ $oForm2 = $oFinalForm->add('title_group', 'input', ‘Title Group’)
 			         ->synchronizeEntity('Venus\src\Helium\Entity\user')
 			         ->getForm();
 
-$this->view->assign(‘form’, $oForm2->createView());
-        </pre>
+$this->view->assign(‘form’, $oForm2->createView());</pre>
 
         Dans les templates, vous pouvez écrire tout le formulaire vous-même comme ceci :<br/><br/>
 
@@ -139,8 +143,7 @@ $this->view->assign(‘form’, $oForm2->createView());
 {$form->form_start}
     {$form->form_row[‘users’][‘id_user’]}
     {$form->form_row[‘title_group’]}
-{$form->form_end}
-        </pre>
+{$form->form_end}</pre>
 
         Voici un exemple d’utilisation de contrainte sur les formulaires ce qui permettra d’invalider ou de valider un
         formulaire :<br/><br/>
@@ -151,8 +154,7 @@ $oForm = $this->form
 		      ->add('id_user', 'select', 'Users', null, $aUser)
 		      ->synchronizeEntity('Venus\src\Helium\Entity\user')
 		      ->addConstraint('Utilisateur', new \Venus\lib\Validator\NotBlank)
-              ->getForm();
-        </pre>
+              ->getForm();</pre>
 
         Le formulaire n’acceptera pas d’avoir un utilisateur vide et retournera une exception.<br/><br/>
         <h2>Type de champs</h2>
@@ -170,7 +172,6 @@ $oForm = $this->form
         ->add($name, 'checkbox', $label, $value, $valueChecked) => permet de créer un bouton checkbox.<br/><br/>
         ->add($name, 'radio', $label, $value, $valueChecked) => permet de créer un bouton radio.<br/><br/>
         ->add($name, 'hidden', '', $value) => permet de créer un champ caché.<br/><br/>
-
 
         <a href="les_caches.html">[suivant]</a>
     </body>

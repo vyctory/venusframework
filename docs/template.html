@@ -44,8 +44,17 @@
     documentation officielle : <a href="https://vyctory.github.io/apollina-template/index.html">Documentation officielle</a>.
     <br/><br/>
 
-    Notre template contient de l’HTML et un balisage particulier permettant de boucler sur les deux exemples que l’on a
-    insérés en base.<br/><br/>
+    Les templates proposent comme vous le voyez ci-dessus, un foreach proche du php pour parcourir un tableau complet.
+    <br/><br/>
+    Toute la partie visuelle de Venus Framework (Framework full MVC) se base sur ce système de templating.<br/><br/>
+    Vous pourrez assigner des variables à votre vue dans votre contrôlleur de cette façon :<br/><br/>
+
+    <pre>
+$this->view
+     ->assign('Exemple', $aExemple)
+     ->display();</pre>
+
+    Le display permet d'afficher le contenu du template.<br/><br/>
 
     <a href="xxxx.html">[suivant]</a>
 </body>
