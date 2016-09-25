@@ -15,7 +15,7 @@
  */
 namespace Venus\lib;
 
-use \Venus\lib\Bash as Bash;
+use \VenusBash\Bash as Bash;
 use \Venus\lib\Log\AbstractLogger as AbstractLogger;
 use \Venus\lib\Log\LogLevel as LogLevel;
 

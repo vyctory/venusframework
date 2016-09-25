@@ -18,7 +18,7 @@ namespace Venus\core;
 use \Venus\core\Security                as Security;
 use \Venus\lib\Cache                    as Cache;
 use \Venus\lib\Less                     as Less;
-use \Venus\lib\PhpDoc                   as PhpDoc;
+use \VenusPhpdoc\Reader                 as PhpDoc;
 use \Venus\lib\Typescript               as Typescript;
 use \Venus\lib\Request                  as Request;
 use \Venus\lib\Vendor                   as Vendor;

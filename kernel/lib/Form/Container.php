@@ -17,6 +17,7 @@ namespace Venus\lib\Form;
 
 use \Attila\lib\Entity  as LibEntity;
 use \Venus\lib\Form     as Form;
+use VenusPhpdoc\Reader;
 
 /**
  * Container of Form lib
@@ -64,6 +65,11 @@ class Container
      * @var    array
      */
     private $_aRequest = null;
+
+    /**
+     * @var object
+     */
+    private $entityObject = null;
 
     /**
      * get the Value
@@ -130,9 +136,6 @@ class Container
         // Save
         if ($this->_oForm->getIdEntity() > 0 && $this->_oForm->getSynchronizeEntity() !== null && count($aRequest) > 0) {
 
-            $sModelName = str_replace('Entity', 'Model', $this->_oForm->getSynchronizeEntity());
-            $oModel = new $sModelName;
-
             $oEntity = new $this->_oForm->getSynchronizeEntity();
             $sPrimaryKey = LibEntity::getPrimaryKeyNameWithoutMapping($oEntity);
             $sMethodName = 'set_'.$sPrimaryKey;
@@ -155,11 +158,36 @@ class Container
 
                 if ($sValue->getName()) {
                     $sMethodName = 'set_' . $sValue->getName() . '';
+
+                    if (method_exists($oEntity, $sMethodName)) {
+
+                        $doc = Reader::getPhpDocOfMethod($sClassName, $sMethodName);
+
+                        if ($doc['param'][0][0] === 'int') {
+                            $aRequest[$sValue->getName()] = (int)$aRequest[$sValue->getName()];
+                        }
+                        if ($doc['param'][0][0] === 'string') {
+                            $aRequest[$sValue->getName()] = (string)$aRequest[$sValue->getName()];
+                        }
+                        if ($doc['param'][0][0] === 'float') {
+                            $aRequest[$sValue->getName()] = (float)$aRequest[$sValue->getName()];
+                        }
+                        if ($doc['param'][0][0] === 'bool') {
+                            $aRequest[$sValue->getName()] = (bool)$aRequest[$sValue->getName()];
+                        }
+                        if ($doc['param'][0][0] === 'boolean') {
+                            $aRequest[$sValue->getName()] = (bool)$aRequest[$sValue->getName()];
+                        }
+                    }
+
                     call_user_func_array(array(&$oEntity, $sMethodName), array($aRequest[$sValue->getName()]));
                 }
             }
 
-            $this->_oForm->setIdEntityCreated($oEntity->save());
+            $idRecord =  $oEntity->save();
+            var_dump($idRecord,$oEntity);
+            $this->setEntityObject($oEntity);
+            $this->_oForm->setIdEntityCreated($idRecord);
         }
 
         $this->_bHandleRequestActivate = true;
@@ -241,5 +269,21 @@ class Container
         }
 
         return true;
+    }
+
+    /**
+     * @return null
+     */
+    public function getEntityObject()
+    {
+        return $this->entityObject;
+    }
+
+    /**
+     * @param null $entityObject
+     */
+    public function setEntityObject($entityObject)
+    {
+        $this->entityObject = $entityObject;
     }
 }

@@ -271,9 +271,10 @@ use \Venus\src\Demo\Model\news as news; </pre>
     Redirect<br/><br/>
     Vous pouvez créer une redirection http rapide (ou redirection interne en cli) comme ceci :<br/><br/>
 
-    <pre>
-$this->redirect($this->url->getUrl('home', array()));</pre>
+    <pre>$this->redirect($this->url->getUrl('home', array()));</pre>
 
+    Le redirect accepte également un deuxième paramètre afin de déterminer le type de redirection désirée : 301, 302,
+    308 ou 309. Par défaut, la fonction fait une redicrection 301.<br/><br/>
     Forward<br/><br/>
     Vous pouvez créer une redirection vers une autre action comme ceci :<br/><br/>
 

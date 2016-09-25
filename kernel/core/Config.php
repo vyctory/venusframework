@@ -38,19 +38,21 @@ class Config
 	 */
 	private static $_aConfCache = array();
 
-	/**
-	 * get a configuration
-	 *
-	 * @access public
-	 * @param  string $sName name of the configuration
-	 * @param  string $sPortal portal name if you specify it
-	 * @param  bool $bNoDoRedirect not allowed the redirect parameter
-	 * @return void
-	 */
-	public static function get(string $sName, string $sPortal = null, bool $bNoDoRedirect = false)
+    /**
+     * get a configuration
+     *
+     * @access public
+     * @param  string $sName name of the configuration
+     * @param  string $sPortal portal name if you specify it
+     * @param  bool $bNoDoRedirect not allowed the redirect parameter
+     * @param bool $returnNameOfFiles
+     * @return mixed
+     */
+	public static function get(string $sName, string $sPortal = null, bool $bNoDoRedirect = false,  bool $returnNameOfFiles = false)
 	{
         $aDirectories = [];
         $sJsonFile='';
+        $jsonFilesUse = '';
 
         if ($bNoDoRedirect === true) { $sNameCache = $sName.'_true'; } else { $sNameCache = $sName; }
 	    
@@ -67,7 +69,7 @@ class Config
 			}
 		}
 
-		if (!isset(self::$_aConfCache[$sNameCache])) {
+		if (!isset(self::$_aConfCache[$sNameCache]) && !isset(self::$_aConfCache[$sNameCache.'files'])) {
 
 			$base = new \stdClass;
 
@@ -81,76 +83,89 @@ class Config
         
         				$sJsonFile = str_replace('core', '../bundles/conf', __DIR__).DIRECTORY_SEPARATOR.$sName.'.conf-local';
         				$base = self::_mergeAndGetConf($sJsonFile, $base);
+                        $jsonFilesUse .= $sJsonFile.';';
         			}
 
         			if (file_exists(str_replace('kernel'.DIRECTORY_SEPARATOR.'core', 'bundles'.DIRECTORY_SEPARATOR.'src'.DIRECTORY_SEPARATOR.$sPortal.DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'conf', __DIR__).DIRECTORY_SEPARATOR.$sName.'.conf-local')) {
         				
         				$sJsonFile = str_replace('kernel'.DIRECTORY_SEPARATOR.'core', 'bundles'.DIRECTORY_SEPARATOR.'src'.DIRECTORY_SEPARATOR.$sPortal.DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'conf', __DIR__).DIRECTORY_SEPARATOR.$sName.'.conf-local';
         				$base = self::_mergeAndGetConf($sJsonFile, $base);
+                        $jsonFilesUse .= $sJsonFile.';';
         			}
 
         			if (file_exists(str_replace('kernel'.DIRECTORY_SEPARATOR.'core', 'bundles'.DIRECTORY_SEPARATOR.'src'.DIRECTORY_SEPARATOR.$sPortal.DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'conf', __DIR__).DIRECTORY_SEPARATOR.$sName.'.conf-dev') && getenv('DEV') == 1) {
         
         				$sJsonFile = str_replace('kernel'.DIRECTORY_SEPARATOR.'core', 'bundles'.DIRECTORY_SEPARATOR.'src'.DIRECTORY_SEPARATOR.$sPortal.DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'conf', __DIR__).DIRECTORY_SEPARATOR.$sName.'.conf-dev';
         				$base = self::_mergeAndGetConf($sJsonFile, $base);
+                        $jsonFilesUse .= $sJsonFile.';';
         			}
 
         			if (file_exists(str_replace('core', '../bundles/conf', __DIR__).DIRECTORY_SEPARATOR.$sName.'.conf-dev') && getenv('DEV') == 1) {
         
         				$sJsonFile = str_replace('core', '../bundles/conf', __DIR__).DIRECTORY_SEPARATOR.$sName.'.conf-dev';
         				$base = self::_mergeAndGetConf($sJsonFile, $base);
+                        $jsonFilesUse .= $sJsonFile.';';
         			}
 
         			if (file_exists(str_replace('kernel'.DIRECTORY_SEPARATOR.'core', 'bundles'.DIRECTORY_SEPARATOR.'src'.DIRECTORY_SEPARATOR.$sPortal.DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'conf', __DIR__).DIRECTORY_SEPARATOR.$sName.'.conf-dev') && getenv('PROD') == 1) {
         
         				$sJsonFile = str_replace('kernel'.DIRECTORY_SEPARATOR.'core', 'bundles'.DIRECTORY_SEPARATOR.'src'.DIRECTORY_SEPARATOR.$sPortal.DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'conf', __DIR__).DIRECTORY_SEPARATOR.$sName.'.conf-prod';
         				$base = self::_mergeAndGetConf($sJsonFile, $base);
+                        $jsonFilesUse .= $sJsonFile.';';
         			}
 
         			if (file_exists(str_replace('core', '../bundles/conf', __DIR__).DIRECTORY_SEPARATOR.$sName.'.conf-dev') && getenv('PROD') == 1) {
         
         				$sJsonFile = str_replace('core', '../bundles/conf', __DIR__).DIRECTORY_SEPARATOR.$sName.'.conf-prod';
         				$base = self::_mergeAndGetConf($sJsonFile, $base);
+                        $jsonFilesUse .= $sJsonFile.';';
         			}
 
         			if (file_exists(str_replace('kernel'.DIRECTORY_SEPARATOR.'core', 'bundles'.DIRECTORY_SEPARATOR.'src'.DIRECTORY_SEPARATOR.$sPortal.DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'conf', __DIR__).DIRECTORY_SEPARATOR.$sName.'.conf-dev') && getenv('PREPROD') == 1) {
         
         				$sJsonFile = str_replace('kernel'.DIRECTORY_SEPARATOR.'core', 'bundles'.DIRECTORY_SEPARATOR.'src'.DIRECTORY_SEPARATOR.$sPortal.DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'conf', __DIR__).DIRECTORY_SEPARATOR.$sName.'.conf-pprod';
         				$base = self::_mergeAndGetConf($sJsonFile, $base);
+                        $jsonFilesUse .= $sJsonFile.';';
         			}
 
         			if (file_exists(str_replace('core', '../bundles/conf', __DIR__).DIRECTORY_SEPARATOR.$sName.'.conf-dev') && getenv('PREPROD') == 1) {
         
         				$sJsonFile = str_replace('core', '../bundles/conf', __DIR__).DIRECTORY_SEPARATOR.$sName.'.conf-pprod';
         				$base = self::_mergeAndGetConf($sJsonFile, $base);
+                        $jsonFilesUse .= $sJsonFile.';';
         			}
 
         			if (file_exists(str_replace('kernel'.DIRECTORY_SEPARATOR.'core', 'bundles'.DIRECTORY_SEPARATOR.'src'.DIRECTORY_SEPARATOR.$sPortal.DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'conf', __DIR__).DIRECTORY_SEPARATOR.$sName.'.conf-dev') && getenv('RECETTE') == 1) {
         
         				$sJsonFile = str_replace('kernel'.DIRECTORY_SEPARATOR.'core', 'bundles'.DIRECTORY_SEPARATOR.'src'.DIRECTORY_SEPARATOR.$sPortal.DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'conf', __DIR__).DIRECTORY_SEPARATOR.$sName.'.conf-rec';
         				$base = self::_mergeAndGetConf($sJsonFile, $base);
+                        $jsonFilesUse .= $sJsonFile.';';
         			}
 
         			if (file_exists(str_replace('core', '../bundles/conf', __DIR__).DIRECTORY_SEPARATOR.$sName.'.conf-dev') && getenv('RECETTE') == 1) {
         
         				$sJsonFile = str_replace('core', '../bundles/conf', __DIR__).DIRECTORY_SEPARATOR.$sName.'.conf-rec';
         				$base = self::_mergeAndGetConf($sJsonFile, $base);
+                        $jsonFilesUse .= $sJsonFile.';';
         			}
 
         			if (file_exists(str_replace('kernel'.DIRECTORY_SEPARATOR.'core', 'bundles'.DIRECTORY_SEPARATOR.'src'.DIRECTORY_SEPARATOR.$sPortal.DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'conf', __DIR__).DIRECTORY_SEPARATOR.$sName.'.conf-local')) {
         
         				$sJsonFile = str_replace('kernel'.DIRECTORY_SEPARATOR.'core', 'bundles'.DIRECTORY_SEPARATOR.'src'.DIRECTORY_SEPARATOR.$sPortal.DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'conf', __DIR__).DIRECTORY_SEPARATOR.$sName.'.conf-local';
         				$base = self::_mergeAndGetConf($sJsonFile, $base);
+                        $jsonFilesUse .= $sJsonFile.';';
         			}
 
         			if (file_exists(str_replace('kernel'.DIRECTORY_SEPARATOR.'core', 'bundles'.DIRECTORY_SEPARATOR.'src'.DIRECTORY_SEPARATOR.$sPortal.DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'conf', __DIR__).DIRECTORY_SEPARATOR.$sName.'.conf')) {
         
         				$sJsonFile = str_replace('kernel'.DIRECTORY_SEPARATOR.'core', 'bundles'.DIRECTORY_SEPARATOR.'src'.DIRECTORY_SEPARATOR.$sPortal.DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'conf', __DIR__).DIRECTORY_SEPARATOR.$sName.'.conf';
         				$base = self::_mergeAndGetConf($sJsonFile, $base);
+                        $jsonFilesUse .= $sJsonFile.';';
         			}
 
         			$sJsonFile = str_replace('core', '../bundles/conf', __DIR__).DIRECTORY_SEPARATOR.$sName.'.conf';
         			$base = self::_mergeAndGetConf($sJsonFile, $base);
+                    $jsonFilesUse .= $sJsonFile.';';
 			    }
 		    }
 
@@ -165,6 +180,7 @@ class Config
 			}
 			
 			self::$_aConfCache[$sNameCache] = $base;
+            self::$_aConfCache[$sNameCache.'files'] = $jsonFilesUse;
 		}
 
 		if (!self::$_aConfCache[$sNameCache]) {
@@ -172,8 +188,9 @@ class Config
 			$oDebug = Debug::getInstance();
 			$oDebug->error('The configuration file '.$sName.' is in error!');
 		}
-		
-		return self::$_aConfCache[$sNameCache];
+
+		if ($returnNameOfFiles) { return substr(self::$_aConfCache[$sNameCache.'files'], 0, -1); }
+		else { return self::$_aConfCache[$sNameCache]; }
 	}
 	
 	/**
