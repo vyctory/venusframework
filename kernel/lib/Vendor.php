@@ -63,7 +63,7 @@ class Vendor
 	    }
 	    else if ($sVendorName === 'Attila\Orm') {
 
-	        $oDbConfig = Config::get('Db')->configuration;
+	        $oDbConfig = Config::get('database')->configuration;
 
 	        return new $sVendorName($oDbConfig->db, $oDbConfig->type, $oDbConfig->host, $oDbConfig->user, $oDbConfig->password, 
 	            $oDbConfig->db);

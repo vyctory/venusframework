@@ -15,7 +15,7 @@ class Headers implements RequestInterface
      * @param string $default
      * @return string
      */
-    public function get(string $name, string $default = null) : string
+    public function get(string $name, string $default = null)
     {
         if (isset(apache_request_headers()[$name]) && apache_request_headers()[$name] != '') {
             return apache_request_headers()[$name];

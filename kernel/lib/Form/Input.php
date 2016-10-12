@@ -180,7 +180,7 @@ class Input extends Common
             $sContent .= '<label>'.$this->getLabel().'</label> ';
         }
 
-        $sContent .= '<input type="'.$this->getType().'" name="'.$this->getName().'"';
+        $sContent .= '<input type="'.$this->getType().'" name="'.$this->getName().'" id="'.$this->getName().'"';
 
         if ($this->getValue() !== null) { $sContent .= ' value="'.$this->getValue().'"'; }
 

@@ -144,7 +144,7 @@ class Textarea extends Common
 			$sContent .= '<label>'.$this->getLabel().'</label> ';
 		}
 
-		$sContent .= '<textarea name="'.$this->getName().'">';
+		$sContent .= '<textarea name="'.$this->getName().'" id="'.$this->getName().'">';
 		
 		if ($this->getValue() !== null) { $sContent .= $this->getValue(); }
 		

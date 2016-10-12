@@ -15,12 +15,14 @@ class Query implements RequestInterface
      * @param string $default
      * @return string
      */
-    public function get(string $name, string $default = null) : string
+    public function get(string $name, string $default = null)
     {
         if (isset($_GET[$name]) && $_GET[$name] != '') {
             return $_GET[$name];
         } else if ($default !== null) {
             return $default;
+        } else {
+            return '';
         }
     }
 }

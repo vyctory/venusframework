@@ -62,7 +62,7 @@ class Ldap
 	 */
 	public function __construct()
 	{
-	    $oDbConf = Config::get('Ldap')->configuration;
+	    $oDbConf = Config::get('ldap')->configuration;
 
 		$this->_sBase = $oDbConf->base;
 

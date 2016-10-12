@@ -156,7 +156,7 @@ class Select extends Common
 		
 		if ($this->getLabel() !== null) { $sContent .= '<label>'.$this->getLabel().'</label> '; }
 		
-		$sContent .= '<select name="'.$this->getName().'">';
+		$sContent .= '<select name="'.$this->getName().'" id="'.$this->getName().'">';
 
 		foreach ($this->getOptions() as $sKey => $sValue) {
 

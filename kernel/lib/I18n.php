@@ -43,7 +43,7 @@ class I18n extends CoreI18n
              ->setI18nDomain(I18N_DOMAIN)
              ->setIntermediaiteDirectory(DIRECTORY_SEPARATOR.'LC_MESSAGES'.DIRECTORY_SEPARATOR);
         
-        foreach (Config::get('Plugins')->list as $iKey => $sPlugin) {
+        foreach (Config::get('plugins')->list as $iKey => $sPlugin) {
             
             if (file_exists(__DIR__ . DIRECTORY_SEPARATOR .DIRECTORY_SEPARATOR.'src'.DIRECTORY_SEPARATOR.'plugins'.DIRECTORY_SEPARATOR.$sPlugin.DIRECTORY_SEPARATOR.'i18n'.DIRECTORY_SEPARATOR.$this->getLanguage().$this->getIntermediaiteDirectory().$sPlugin.'.json')) {
 

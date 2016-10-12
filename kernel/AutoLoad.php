@@ -80,13 +80,9 @@ if (file_exists(preg_replace('#kernel#', '', __DIR__).'vendor/autoload.php')) {
  * Load the autoload file (or simple files) defined in the Const.conf
  */
 
-$oConfig = \Venus\core\Config::get('Const');
+if (defined('AUTOLOAD')) {
 
-if (isset($oConfig) && isset($oConfig->autoload)) {
-    
-    $oAutoloadConf = $oConfig->autoload;
-    
-    foreach ($oAutoloadConf as $sFile) {
+    foreach (AUTOLOAD as $sFile) {
     
         require __DIR__ . '/bundles/' .$sFile;
     }

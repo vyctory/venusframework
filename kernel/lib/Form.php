@@ -278,6 +278,10 @@ class Form
 
                 foreach ($this->_aElement as $sKey => $sValue) {
 
+					if ($sValue instanceof \Venus\lib\Form\Input && $sValue->getType() == 'submit') {
+						continue;
+					}
+					
                     if ($sValue instanceof \Venus\lib\Form\Radio) {
 
                         $sExKey = $sKey;
@@ -290,7 +294,9 @@ class Form
                     } else {
 
                         $sMethodNameInEntity = 'get_'.$sKey;
-                        $mValue = $oCompleteEntity->$sMethodNameInEntity();
+						if (method_exists($oCompleteEntity, $sMethodNameInEntity)) {
+							$mValue = $oCompleteEntity->$sMethodNameInEntity();
+						}
 
                         if ($sValue instanceof \Venus\lib\Form\Radio && method_exists($this->_aElement[$sExKey], 'setValueChecked')) {
 
@@ -305,7 +311,7 @@ class Form
         }
 
         $oForm = new \StdClass();
-        $oForm->start = '<form name="form'.$this->_iFormNumber.'" method="post"><input type="hidden" value="1" name="validform'.$this->_iFormNumber.'">';
+        $oForm->start = '<form name="form'.$this->_iFormNumber.'" method="post" enctype="multipart/form-data"><input type="hidden" value="1" name="validform'.$this->_iFormNumber.'">';
         $oForm->form = array();
 
         foreach ($this->_aElement as $sKey => $sValue) {

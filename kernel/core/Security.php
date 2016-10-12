@@ -67,7 +67,7 @@ class Security {
 
 	public function checkSecurity() {
 
-		foreach (Config::get('Route') as $sHost => $oHost) {
+		foreach (Config::get('route') as $sHost => $oHost) {
 
 			if ((!strstr($sHost, '/') && $sHost == $_SERVER['HTTP_HOST'])
 				|| (strstr($sHost, '/') && strstr($_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'], $sHost))) {
@@ -167,7 +167,7 @@ class Security {
 
 	private function _checkAccess() : bool {
 
-		$oSecurity = Config::get('Security');
+		$oSecurity = Config::get('security');
 
 		if (isset($oSecurity->access)) {
 
@@ -192,7 +192,7 @@ class Security {
 
 	private function _checkBlackListIps() : bool {
 
-		$oSecurity = Config::get('Security');
+		$oSecurity = Config::get('security');
 
 		if (isset($oSecurity->blacklist_ips)) {
 
@@ -215,7 +215,7 @@ class Security {
 	private function _checkPasswordIsGood() : bool {
 
 		$sLogin = self::$_sLogin;
-		$sPassword = Config::get('Security')->users->$sLogin->password;
+		$sPassword = Config::get('security')->users->$sLogin->password;
 
 		if ($sPassword == self::$_sPassword) { return true; }
 		else if ($sPassword == md5(self::$_sPassword)) { return true; }
@@ -234,7 +234,7 @@ class Security {
 		if (self::$_sLogin) {
 
 			$sLogin = self::$_sLogin;
-			return Config::get('Security')->users->$sLogin->roles;
+			return Config::get('security')->users->$sLogin->roles;
 		} else {
 
 			return '';

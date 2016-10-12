@@ -5,195 +5,28 @@
  *
  * @category  	core
  * @author    	Judicaël Paquet <judicael.paquet@gmail.com>
- * @copyright 	Copyright (c) 2013-2014 PAQUET Judicaël FR Inc. (https://github.com/las93)
- * @license   	https://github.com/las93/venus2/blob/master/LICENSE.md Tout droit réservé à PAQUET Judicaël
- * @version   	Release: 1.0.0
- * @filesource	https://github.com/las93/venus2
- * @link      	https://github.com/las93
- * @since     	1.0
+ * @copyright 	Copyright (c) 2013-2014 PAQUET Judicaël FR Inc. (https://github.com/vyctory)
+ * @license   	https://github.com/vyctory/venusframework/blob/master/LICENSE.md Tout droit réservé à PAQUET Judicaël
+ * @version   	Release: 3.0.0
+ * @filesource	https://github.com/vyctory/venusframework
+ * @link      	https://github.com/vyctory
+ * @since     	3.0
+ * @tutorial    https://vyctory.github.io/venusframework/index.html
  */
 namespace Venus\core;
 
-use \Venus\lib\Debug as Debug;
-
 /**
- * Config Manager
- *
- * @category  	core
- * @author    	Judicaël Paquet <judicael.paquet@gmail.com>
- * @copyright 	Copyright (c) 2013-2014 PAQUET Judicaël FR Inc. (https://github.com/las93)
- * @license   	https://github.com/las93/venus3/blob/master/LICENSE.md Tout droit réservé à PAQUET Judicaël
- * @version   	Release: 3.0.0
- * @filesource	https://github.com/las93/venus3
- * @link      	https://github.com/las93
- * @since     	3.0
+ * Class Config
+ * @package Venus\core
  */
 class Config
 {
-	/**
-	 * conf in a cache array
-	 *
-	 * @access private
-	 * @var    array
-	 */
-	private static $_aConfCache = array();
+    /**
+     * @var
+     */
+	private static $config;
 
     /**
-     * get a configuration
-     *
-     * @access public
-     * @param  string $sName name of the configuration
-     * @param  string $sPortal portal name if you specify it
-     * @param  bool $bNoDoRedirect not allowed the redirect parameter
-     * @param bool $returnNameOfFiles
-     * @return mixed
-     */
-	public static function get(string $sName, string $sPortal = null, bool $bNoDoRedirect = false,  bool $returnNameOfFiles = false)
-	{
-        $aDirectories = [];
-        $sJsonFile='';
-        $jsonFilesUse = '';
-
-        if ($bNoDoRedirect === true) { $sNameCache = $sName.'_true'; } else { $sNameCache = $sName; }
-	    
-		if ($sPortal === null || !is_string($sPortal)) {
-		    
-		    if (defined('PORTAL')) {
-
-				$sPortal = PORTAL;
-				$aDirectories = array($sPortal);
-			} else {
-
-				$sPortal = '';
-				$aDirectories = scandir(str_replace('core', '../bundles/src', __DIR__));
-			}
-		}
-
-		if (!isset(self::$_aConfCache[$sNameCache]) && !isset(self::$_aConfCache[$sNameCache.'files'])) {
-
-			$base = new \stdClass;
-
-            if (count($aDirectories) < 1) { $aDirectories = [$sPortal]; }
-
-			foreach ($aDirectories as $sPortal) {
-
-			    if ($sPortal != '..' && $sPortal != '.') {
-
-        			if (file_exists(str_replace('core', '../bundles/conf', __DIR__).DIRECTORY_SEPARATOR.$sName.'.conf-local')) {
-        
-        				$sJsonFile = str_replace('core', '../bundles/conf', __DIR__).DIRECTORY_SEPARATOR.$sName.'.conf-local';
-        				$base = self::_mergeAndGetConf($sJsonFile, $base);
-                        $jsonFilesUse .= $sJsonFile.';';
-        			}
-
-        			if (file_exists(str_replace('kernel'.DIRECTORY_SEPARATOR.'core', 'bundles'.DIRECTORY_SEPARATOR.'src'.DIRECTORY_SEPARATOR.$sPortal.DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'conf', __DIR__).DIRECTORY_SEPARATOR.$sName.'.conf-local')) {
-        				
-        				$sJsonFile = str_replace('kernel'.DIRECTORY_SEPARATOR.'core', 'bundles'.DIRECTORY_SEPARATOR.'src'.DIRECTORY_SEPARATOR.$sPortal.DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'conf', __DIR__).DIRECTORY_SEPARATOR.$sName.'.conf-local';
-        				$base = self::_mergeAndGetConf($sJsonFile, $base);
-                        $jsonFilesUse .= $sJsonFile.';';
-        			}
-
-        			if (file_exists(str_replace('kernel'.DIRECTORY_SEPARATOR.'core', 'bundles'.DIRECTORY_SEPARATOR.'src'.DIRECTORY_SEPARATOR.$sPortal.DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'conf', __DIR__).DIRECTORY_SEPARATOR.$sName.'.conf-dev') && getenv('DEV') == 1) {
-        
-        				$sJsonFile = str_replace('kernel'.DIRECTORY_SEPARATOR.'core', 'bundles'.DIRECTORY_SEPARATOR.'src'.DIRECTORY_SEPARATOR.$sPortal.DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'conf', __DIR__).DIRECTORY_SEPARATOR.$sName.'.conf-dev';
-        				$base = self::_mergeAndGetConf($sJsonFile, $base);
-                        $jsonFilesUse .= $sJsonFile.';';
-        			}
-
-        			if (file_exists(str_replace('core', '../bundles/conf', __DIR__).DIRECTORY_SEPARATOR.$sName.'.conf-dev') && getenv('DEV') == 1) {
-        
-        				$sJsonFile = str_replace('core', '../bundles/conf', __DIR__).DIRECTORY_SEPARATOR.$sName.'.conf-dev';
-        				$base = self::_mergeAndGetConf($sJsonFile, $base);
-                        $jsonFilesUse .= $sJsonFile.';';
-        			}
-
-        			if (file_exists(str_replace('kernel'.DIRECTORY_SEPARATOR.'core', 'bundles'.DIRECTORY_SEPARATOR.'src'.DIRECTORY_SEPARATOR.$sPortal.DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'conf', __DIR__).DIRECTORY_SEPARATOR.$sName.'.conf-dev') && getenv('PROD') == 1) {
-        
-        				$sJsonFile = str_replace('kernel'.DIRECTORY_SEPARATOR.'core', 'bundles'.DIRECTORY_SEPARATOR.'src'.DIRECTORY_SEPARATOR.$sPortal.DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'conf', __DIR__).DIRECTORY_SEPARATOR.$sName.'.conf-prod';
-        				$base = self::_mergeAndGetConf($sJsonFile, $base);
-                        $jsonFilesUse .= $sJsonFile.';';
-        			}
-
-        			if (file_exists(str_replace('core', '../bundles/conf', __DIR__).DIRECTORY_SEPARATOR.$sName.'.conf-dev') && getenv('PROD') == 1) {
-        
-        				$sJsonFile = str_replace('core', '../bundles/conf', __DIR__).DIRECTORY_SEPARATOR.$sName.'.conf-prod';
-        				$base = self::_mergeAndGetConf($sJsonFile, $base);
-                        $jsonFilesUse .= $sJsonFile.';';
-        			}
-
-        			if (file_exists(str_replace('kernel'.DIRECTORY_SEPARATOR.'core', 'bundles'.DIRECTORY_SEPARATOR.'src'.DIRECTORY_SEPARATOR.$sPortal.DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'conf', __DIR__).DIRECTORY_SEPARATOR.$sName.'.conf-dev') && getenv('PREPROD') == 1) {
-        
-        				$sJsonFile = str_replace('kernel'.DIRECTORY_SEPARATOR.'core', 'bundles'.DIRECTORY_SEPARATOR.'src'.DIRECTORY_SEPARATOR.$sPortal.DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'conf', __DIR__).DIRECTORY_SEPARATOR.$sName.'.conf-pprod';
-        				$base = self::_mergeAndGetConf($sJsonFile, $base);
-                        $jsonFilesUse .= $sJsonFile.';';
-        			}
-
-        			if (file_exists(str_replace('core', '../bundles/conf', __DIR__).DIRECTORY_SEPARATOR.$sName.'.conf-dev') && getenv('PREPROD') == 1) {
-        
-        				$sJsonFile = str_replace('core', '../bundles/conf', __DIR__).DIRECTORY_SEPARATOR.$sName.'.conf-pprod';
-        				$base = self::_mergeAndGetConf($sJsonFile, $base);
-                        $jsonFilesUse .= $sJsonFile.';';
-        			}
-
-        			if (file_exists(str_replace('kernel'.DIRECTORY_SEPARATOR.'core', 'bundles'.DIRECTORY_SEPARATOR.'src'.DIRECTORY_SEPARATOR.$sPortal.DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'conf', __DIR__).DIRECTORY_SEPARATOR.$sName.'.conf-dev') && getenv('RECETTE') == 1) {
-        
-        				$sJsonFile = str_replace('kernel'.DIRECTORY_SEPARATOR.'core', 'bundles'.DIRECTORY_SEPARATOR.'src'.DIRECTORY_SEPARATOR.$sPortal.DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'conf', __DIR__).DIRECTORY_SEPARATOR.$sName.'.conf-rec';
-        				$base = self::_mergeAndGetConf($sJsonFile, $base);
-                        $jsonFilesUse .= $sJsonFile.';';
-        			}
-
-        			if (file_exists(str_replace('core', '../bundles/conf', __DIR__).DIRECTORY_SEPARATOR.$sName.'.conf-dev') && getenv('RECETTE') == 1) {
-        
-        				$sJsonFile = str_replace('core', '../bundles/conf', __DIR__).DIRECTORY_SEPARATOR.$sName.'.conf-rec';
-        				$base = self::_mergeAndGetConf($sJsonFile, $base);
-                        $jsonFilesUse .= $sJsonFile.';';
-        			}
-
-        			if (file_exists(str_replace('kernel'.DIRECTORY_SEPARATOR.'core', 'bundles'.DIRECTORY_SEPARATOR.'src'.DIRECTORY_SEPARATOR.$sPortal.DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'conf', __DIR__).DIRECTORY_SEPARATOR.$sName.'.conf-local')) {
-        
-        				$sJsonFile = str_replace('kernel'.DIRECTORY_SEPARATOR.'core', 'bundles'.DIRECTORY_SEPARATOR.'src'.DIRECTORY_SEPARATOR.$sPortal.DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'conf', __DIR__).DIRECTORY_SEPARATOR.$sName.'.conf-local';
-        				$base = self::_mergeAndGetConf($sJsonFile, $base);
-                        $jsonFilesUse .= $sJsonFile.';';
-        			}
-
-        			if (file_exists(str_replace('kernel'.DIRECTORY_SEPARATOR.'core', 'bundles'.DIRECTORY_SEPARATOR.'src'.DIRECTORY_SEPARATOR.$sPortal.DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'conf', __DIR__).DIRECTORY_SEPARATOR.$sName.'.conf')) {
-        
-        				$sJsonFile = str_replace('kernel'.DIRECTORY_SEPARATOR.'core', 'bundles'.DIRECTORY_SEPARATOR.'src'.DIRECTORY_SEPARATOR.$sPortal.DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'conf', __DIR__).DIRECTORY_SEPARATOR.$sName.'.conf';
-        				$base = self::_mergeAndGetConf($sJsonFile, $base);
-                        $jsonFilesUse .= $sJsonFile.';';
-        			}
-
-        			$sJsonFile = str_replace('core', '../bundles/conf', __DIR__).DIRECTORY_SEPARATOR.$sName.'.conf';
-        			$base = self::_mergeAndGetConf($sJsonFile, $base);
-                    $jsonFilesUse .= $sJsonFile.';';
-			    }
-		    }
-
-            if ($base === '') {
-				
-				trigger_error("Error in your Json format in this file : ".$sJsonFile, E_USER_NOTICE);
-			}
-
-			if (isset($base->redirect) && $bNoDoRedirect === false) {
-			
-                $base = self::get($sName, $base->redirect);
-			}
-			
-			self::$_aConfCache[$sNameCache] = $base;
-            self::$_aConfCache[$sNameCache.'files'] = $jsonFilesUse;
-		}
-
-		if (!self::$_aConfCache[$sNameCache]) {
-			
-			$oDebug = Debug::getInstance();
-			$oDebug->error('The configuration file '.$sName.' is in error!');
-		}
-
-		if ($returnNameOfFiles) { return substr(self::$_aConfCache[$sNameCache.'files'], 0, -1); }
-		else { return self::$_aConfCache[$sNameCache]; }
-	}
-	
-	/**
 	 * get the bundle name location or the actualy bundle name if they isn't location
 	 *
 	 * @access public
@@ -207,56 +40,86 @@ class Config
 	    if (isset($oConfig->redirect)) { return $oConfig->redirect; } else { return PORTAL; }
 	}
 
-	/**
-	 * get file content and merge if not exists
-	 *
-	 * @access private
-	 * @param  string $sFileToMerge file to get
-	 * @param  \stdClass $base base
-	 * @return \stdClass
-	 */
-	private static function  _mergeAndGetConf(string $sFileToMerge, \stdClass $base) : \stdClass
-	{
-		$oConfFiles = json_decode(file_get_contents($sFileToMerge));
+    /**
+     * @return mixed
+     */
+    public static function getConfig()
+    {
+        return self::$config;
+    }
 
-		if (is_object($oConfFiles)) {
+    /**
+     * @param mixed $config
+     */
+    public static function setConfig($config)
+    {
+        self::$config = $config;
+    }
 
-			list($oConfFiles, $base) = self::_recursiveGet($oConfFiles, $base);
-			return $base;
-		} else {
+    /**
+     * @param $name
+     * @return mixed
+     */
+    public static function get($name)
+    {
+        return self::$config->$name;
+    }
 
-			echo "The Json ".$sFileToMerge." has an error! Please verify!\n";
-			$oDebug = Debug::getInstance();
-			$oDebug->error("The Json ".$sFileToMerge." has an error! Please verify!\n");
-            new \Exception("The Json ".$sFileToMerge." has an error! Please verify!\n");
-		}
-	}
+    /**
+     * @param string $configFile
+     * @param string $source
+     */
+	public static function load(string $configFile, string $source = 'Implementation by router')
+    {
+	    if (file_exists($configFile)) {
+	        $jsonObject = json_decode(file_get_contents($configFile));
+            self::analyseConfigJson($jsonObject, $configFile);
+	    }
+	    else {
+	        new \Exception('file '.$configFile.' doesn\'t exist. Please verify it. Source : '.$source);
+        }
+    }
 
-	/**
-	 * recursive merge
-	 *
-	 * @access private
-	 * @param  $oConfFiles
-	 * @param  \stdClass $base
-	 * @return multitype:array multitype:array
-	 */
-	private static function _recursiveGet($oConfFiles, \stdClass $base) : array
-	{
-		foreach ($oConfFiles as $sKey => $mOne) {
+    /**
+     * @param $jsonObject
+     * @param $configFile
+     */
+    public static function analyseConfigJson($jsonObject, $configFile)
+    {
+        // check if it exists import file (you must enter them in an array)
+        if (isset($jsonObject->import) && is_array($jsonObject->import)) {
 
-			if (is_object($oConfFiles) && is_object($base) && !isset($base->$sKey)) {
+            foreach ($jsonObject->import as $oneImport) {
 
-				$base->$sKey = $oConfFiles->$sKey;
-			} else if (is_array($oConfFiles) && is_array($base) && !isset($base[$sKey])) {
+                self::load(preg_replace('#^(.+[/\\\\])[a-zA-Z_\-0-9]+\.json$#', '$1', $configFile).$oneImport,
+                    'Import file from json config file : '.$configFile);
+            }
+        }
 
-				$base[$sKey] = $oConfFiles[$sKey];
-            } else if (!isset($base->$sKey) && is_array($mOne)) {
+        self::setConfig(self::mergeObject(self::getConfig(), $jsonObject));
+    }
 
-				$base->$sKey = new \StdClass;
-				list($oConfFiles, $base) = self::_recursiveGet($mOne, $base->$sKey);
-			}
-		}
+    /**
+     * @param \stdClass $objectBase
+     * @param \stdClass $objectToMerge
+     * @return \stdClass
+     */
+    private static function mergeObject($objectBase, $objectToMerge) : \stdClass
+    {
+        if ($objectBase === null) { $objectBase = new \stdClass(); }
 
-		return array($oConfFiles, $base);
-	}
+        foreach($objectToMerge as $key => $one) {
+            if (!isset($objectBase->$key)) {
+                $objectBase->$key = $one;
+            }
+            else if ($one instanceof \stdClass) {
+                $objectBase->$key = self::mergeObject($objectBase->$key, $one);
+            }
+            else {
+                $objectBase->$key = $one;
+            }
+        }
+
+        return $objectBase;
+    }
 }

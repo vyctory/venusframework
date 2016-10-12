@@ -15,12 +15,14 @@ class Request implements RequestInterface
      * @param string $default
      * @return string
      */
-    public function get(string $name, string $default = null) : string
+    public function get(string $name, string $default = null)
     {
         if (isset($_POST[$name]) && $_POST[$name] != '') {
             return $_POST[$name];
         } else if ($default !== null) {
             return $default;
+        } else {
+            return '';
         }
     }
 }

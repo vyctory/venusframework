@@ -117,4 +117,12 @@ class Session
 
 		session_destroy();
 	}
+
+    /**
+     * @return mixed
+     */
+    public function getSessionId() : string
+    {
+        return session_id();
+    }
 }

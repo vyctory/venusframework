@@ -4,14 +4,14 @@
  * Router
  *
  * @category  	core
- * @package   	core\
  * @author    	Judicaël Paquet <judicael.paquet@gmail.com>
- * @copyright 	Copyright (c) 2013-2014 PAQUET Judicaël FR Inc. (https://github.com/las93)
- * @license   	https://github.com/las93/venus2/blob/master/LICENSE.md Tout droit réservé à PAQUET Judicaël
- * @version   	Release: 2.0.0
- * @filesource	https://github.com/las93/venus2
- * @link      	https://github.com/las93
- * @since     	2.0.0
+ * @copyright 	Copyright (c) 2013-2014 PAQUET Judicaël FR Inc. (https://github.com/vyctory)
+ * @license   	https://github.com/vyctory/venusframework/blob/master/LICENSE.md Tout droit réservé à PAQUET Judicaël
+ * @version   	Release: 3.0.0
+ * @filesource	https://github.com/vyctory/venusframework
+ * @link      	https://github.com/vyctory
+ * @since     	3.0
+ * @tutorial    https://vyctory.github.io/venusframework/index.html
  */
 namespace Venus\core;
 
@@ -28,17 +28,8 @@ use \Venus\lib\Log\LoggerAwareInterface as LoggerAwareInterface;
 use \Venus\lib\Log\LoggerInterface      as LoggerInterface;
 
 /**
- * Router
- *
- * @category  	core
- * @package   	core\
- * @author    	Judicaël Paquet <judicael.paquet@gmail.com>
- * @copyright 	Copyright (c) 2013-2014 PAQUET Judicaël FR Inc. (https://github.com/las93)
- * @license   	https://github.com/las93/venus2/blob/master/LICENSE.md Tout droit réservé à PAQUET Judicaël
- * @version   	Release: 2.0.0
- * @filesource	https://github.com/las93/venus2
- * @link      	https://github.com/las93
- * @since     	2.0.0
+ * Class Router
+ * @package Venus\core
  */
 class Router implements LoggerAwareInterface
 {
@@ -91,11 +82,14 @@ class Router implements LoggerAwareInterface
      * @access public
      * @return null|boolean
      */
-    public function run()
+    public function run($environment = null)
     {
-        date_default_timezone_set(Config::get('Const')->timezone);
+        // define the environment with the param passed by the bootsrap file
+        if ($environment) { define('ENV', $environment); } else { define('ENV', 'prod'); }
 
-        $this->_create_constant();
+        $this->loadConfigFiles();
+
+        date_default_timezone_set(TIMEZONE);
 
         if (Request::isHttpRequest()) {
         
@@ -124,7 +118,7 @@ class Router implements LoggerAwareInterface
             // Search public files in all plugins
             if ($_SERVER['REQUEST_URI'] !== '/') {
 
-                foreach (Config::get('Plugins')->list as $iKey => $sPlugin) {
+                foreach (Config::get('plugins') as $iKey => $sPlugin) {
 
                     if (file_exists(__DIR__ . DIRECTORY_SEPARATOR .DIRECTORY_SEPARATOR.'src'.DIRECTORY_SEPARATOR.'plugins'.DIRECTORY_SEPARATOR.$sPlugin.DIRECTORY_SEPARATOR.'public'.$_SERVER['REQUEST_URI'])) {
 
@@ -144,7 +138,7 @@ class Router implements LoggerAwareInterface
                 }
             }
 
-            foreach (Config::get('Route') as $sMultiHost => $oHost) {
+            foreach (Config::get('route') as $sMultiHost => $oHost) {
 
                 foreach (explode(',', $sMultiHost) as $sHost) {
 
@@ -233,7 +227,7 @@ class Router implements LoggerAwareInterface
                 $sBatchName = $aArguments[1];
             }
 
-            if (!isset(Config::get('Route')->batch->script->{$sBatchName})) {
+            if (!isset(Config::get('route')->batch->script->{$sBatchName})) {
 
                 $exBatchName = $aArguments[1];
                 $sBatchName = 'search';
@@ -242,9 +236,9 @@ class Router implements LoggerAwareInterface
                 $aArguments[3] = $exBatchName;
             }
 
-            if (isset(Config::get('Route')->batch->script->{$sBatchName})) {
+            if (isset(Config::get('route')->batch->script->{$sBatchName})) {
 
-                $oBatch = Config::get('Route')->batch->script->{$sBatchName};
+                $oBatch = Config::get('route')->batch->script->{$sBatchName};
                 array_shift($aArguments);
                 array_shift($aArguments);
 
@@ -314,7 +308,7 @@ class Router implements LoggerAwareInterface
 
         if (isset($_SERVER) && isset($_SERVER['HTTP_HOST'])) {
 
-            foreach (Config::get('Route') as $sHost => $oHost) {
+            foreach (Config::get('route') as $sHost => $oHost) {
 
                 if ((!strstr($sHost, '/') && $sHost == $_SERVER['HTTP_HOST'])
                     || (strstr($sHost, '/') && strstr($_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'], $sHost))) {
@@ -335,7 +329,7 @@ class Router implements LoggerAwareInterface
         }
         else if (defined('STDIN')) {
 
-            $oBatch = Config::get('Route')->batch->script->{$sRoute};
+            $oBatch = Config::get('route')->batch->script->{$sRoute};
             echo $this->_loadController($oBatch->controller, $oBatch->action, $aParams);
         }
     }
@@ -349,11 +343,9 @@ class Router implements LoggerAwareInterface
      */
     public function runHttpErrorPage(int $iError)
     {
-        $this->_create_constant();
-
         if (isset($_SERVER) && isset($_SERVER['HTTP_HOST'])) {
 
-            foreach (Config::get('Route') as $sHost => $oHost) {
+            foreach (Config::get('route') as $sHost => $oHost) {
 
                 if ((!strstr($sHost, '/') && $sHost == $_SERVER['HTTP_HOST'])
                     || (strstr($sHost, '/') && strstr($_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'], $sHost))) {
@@ -597,23 +589,6 @@ class Router implements LoggerAwareInterface
     }
 
     /**
-     * create the constants
-     *
-     * @access private
-     * @return void
-     */
-    private function _create_constant()
-    {
-        foreach (Config::get('Const') as $sKey => $mValue) {
-
-            if (is_string($mValue) || is_int($mValue) || is_float($mValue) || is_bool($mValue)) {
-
-                define(strtoupper($sKey), $mValue);
-            }
-        }
-    }
-
-    /**
      * load the controller
      *
      * @access private
@@ -805,5 +780,17 @@ class Router implements LoggerAwareInterface
     public function setLogger(LoggerInterface $logger) {
 
         $this->_oLogger = $logger;
+    }
+
+    /**
+     *
+     */
+    public function loadConfigFiles()
+    {
+        Config::load(str_replace('kernel'.DIRECTORY_SEPARATOR.'core', 'bundles'.DIRECTORY_SEPARATOR.'conf'.DIRECTORY_SEPARATOR.ENV.DIRECTORY_SEPARATOR.'config.json', __DIR__));
+
+        foreach (Config::get('parameters') as $key => $one) {
+            define(strtoupper($key), $one);
+        }
     }
 }

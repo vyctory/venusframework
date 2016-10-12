@@ -132,11 +132,12 @@ class Container
                 return false;
             }
         }
-
+		
         // Save
         if ($this->_oForm->getIdEntity() > 0 && $this->_oForm->getSynchronizeEntity() !== null && count($aRequest) > 0) {
 
-            $oEntity = new $this->_oForm->getSynchronizeEntity();
+			$entityName = $this->_oForm->getSynchronizeEntity();
+			$oEntity = new $entityName;
             $sPrimaryKey = LibEntity::getPrimaryKeyNameWithoutMapping($oEntity);
             $sMethodName = 'set_'.$sPrimaryKey;
 
@@ -145,7 +146,9 @@ class Container
             foreach ($this->_oForm->getElement() as $sKey => $sValue) {
 
                 $sMethodName = 'set_'.$sValue->getName().'';
-                call_user_func_array(array(&$oEntity, $sMethodName), array($aRequest[$sValue->getName()]));
+                if (method_exists($oEntity, $sMethodName)) {
+					call_user_func_array(array(&$oEntity, $sMethodName), array($aRequest[$sValue->getName()]));
+				}
             }
 
             $oEntity->save();
@@ -178,14 +181,13 @@ class Container
                         if ($doc['param'][0][0] === 'boolean') {
                             $aRequest[$sValue->getName()] = (bool)$aRequest[$sValue->getName()];
                         }
-                    }
 
-                    call_user_func_array(array(&$oEntity, $sMethodName), array($aRequest[$sValue->getName()]));
+						call_user_func_array(array(&$oEntity, $sMethodName), array($aRequest[$sValue->getName()]));
+                    }
                 }
             }
 
             $idRecord =  $oEntity->save();
-            var_dump($idRecord,$oEntity);
             $this->setEntityObject($oEntity);
             $this->_oForm->setIdEntityCreated($idRecord);
         }

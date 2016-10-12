@@ -78,6 +78,7 @@ class Di
 	{
 	    if ($bShared === true) { self::$_aSharedDependencyInjectorContener[md5($sNameOfDi)] = $cFunction; }
 	    else { $this->_aDependencyInjectorContener[md5($sNameOfDi)] = $cFunction; }
+		
 		return $this;
 	}
 }

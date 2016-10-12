@@ -66,7 +66,7 @@ class UrlManager
     {
         if (isset($_SERVER) && isset($_SERVER['HTTP_HOST'])) {
 
-            foreach (Config::get('Route') as $sHost => $oHost) {
+            foreach (Config::get('route') as $sHost => $oHost) {
 
                 if ((!strstr($sHost, '/') && $sHost == $_SERVER['HTTP_HOST'])
                     || (strstr($sHost, '/')
