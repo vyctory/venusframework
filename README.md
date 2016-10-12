@@ -8,7 +8,9 @@ VENUS FRAMEWORK
 [![Latest Stable Version](https://poser.pugx.org/las93/venus3/v/stable.svg)](https://packagist.org/packages/las93/venus3)
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/eb4d1677-8e57-421b-afda-00d46c11d424/mini.png)](https://insight.sensiolabs.com/projects/eb4d1677-8e57-421b-afda-00d46c11d424)
 
-Venus 3 Framework 
+Venus Framework 3
+
+Documentation officielle : https://vyctory.github.io/venusframework/
 
 Contact judicael.paquet@gmail.com pour participer au projet ou avoir plus d'information
 Contact judicael.paquet@gmail.com to participate at the project or to have more informations
