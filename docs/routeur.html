@@ -84,7 +84,7 @@ RewriteRule ^.*$ /index.php [NC,L]</pre>
     "localhost" : {
         "routes": {
             "home": {
-                "route": "/",
+                "route": "/[:id]",
                 "controller" : "\\Venus\\src\\Demo\\Controller\\Home",
                 "action": "show",
                 "constraints": {
@@ -107,7 +107,7 @@ RewriteRule ^.*$ /index.php [NC,L]</pre>
     "localhost" : {
         "routes": {
             "home": {
-                "route": "/",
+                "route": "/[:id]",
                 "controller" : "\\Venus\\src\\Demo\\Controller\\Home",
                 "action": "show",
                 "defaults_constraints": {

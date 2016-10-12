@@ -27,18 +27,39 @@
             <span aria-hidden="true" class="octicon octicon-link"></span>
         </a>Les configurations</h3>
 
-    La manipulation des configuration peut-être très utile dans l'avancée de vos projets. Vous pouvez par exemple
-    indiquer<br/><br/>
-    à votre fichier de configuration qu'il doit faire référence à un autre fichier de configuration et pas à lui même :
-    <br/><br/>
-
-        <pre>
+    Les fichiers de configurations ont totalement été revus dans Venus Framework 3. Seul son format json a été conservé.
+    Si vous lancez votre applciation de façon classique, le fichier conf de lancement sera /bundles/conf/prod/config.php.
+    Il vous suffira ensuite de suivre les "import" de ce fichier pour savoir quels fichiers sont appelés.<br/><br/>
+    En développement (appel URL avec index_dev.php), le fichier de configuration appelé de base sera
+    /bundles/conf/dev/config.php.<br/><br/>
+    Ce nouveau système vous permet de créer tous les environements que vous désirez sans risque de conflit. Pour cela,
+    vous pourrez copier /public/index_dev.php en /public/index_monenv.php poru créer un nouvel environnement. Dans ce
+    fichier, vous n'aurez qu'à changer le paramètre de run pour mettre le nom du dossier qui sera appelé en premier. Si
+    vous mettez mon env, le fichier /bundles/conf/monenv/config.php sera appelé.<br/><br/>
+    Pour importer un fichier de configuration à partir d'un autre fichier de configuration il faut faire :<br/><br/>
+    <pre>
 {
-    "redirect": "Helium"
+  "import": [
+    "../common/config.json"
+  ],
 }</pre>
+    Pour définir le chemin du fichier de configuration final, on part du dossier où est appelé le fichier de
+    configuration.<br/><br/>
+    Pour créer des constantes, il faut définir une partie parameters dans un fichier de configuration et mettre les
+    constantes dedans. Le nom qui sera mis en minuscule est autmatiquement retranscrit en majuscule pour respecter les
+    normes de codage populaires.<br/><br/>
+    <pre>
+{
+  "parameters": {
+    "typescript_active" : true,
+    "asset_version" : "v2"
+  }
+}
 
-    Votre Bundle fera appel aux entités du bundle Helium.
-    <br/><br/>
+(en php on appellera)
+
+TYPESCRIPT_ACTIVE et ASSET_VERSION
+    </pre>
 
         <a href="les_formulaires.html">[suivant]</a>
     </body>

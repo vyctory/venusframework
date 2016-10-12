@@ -137,7 +137,7 @@ public function onConstruct() { ; }
         Voici un exemple d’injection de service que l’on peut faire dans un contrôleur :<br/><br/>
 
         <pre>
-$this->di->set(mongo, function() {
+$this->di->set('mongo', function() {
     return new Mongo();
 }, true);
         </pre>
@@ -152,6 +152,15 @@ $this->mongo->connect();
 
 // En passant par le raccourcis de l’injection de dépendance
 $this->di->get('mongo')->connect();
+
+// En passant par le raccourcis de l’injection de dépendance avec paramètre
+$this->di->set(mongo, function($param1, $param2) {
+    echo $param1.' - '.$param2;
+	return new Mongo();
+}, true);
+
+$mongo = $this->di->get('mongo');
+$mongo('param1', 'param2');
         </pre>
 
         Vous pouvez récupérer le contenu des POST envoyé par formulaire voire tester si il y a un POST envoyé de cette

@@ -3,8 +3,8 @@
 /**
  * Controller Manager
  *
- * @category  	src\BackOffice
- * @package   	src\BackOffice\common
+ * @category  	src\plugin
+ * @package   	src\plugin\common
  * @author    	Judicaël Paquet <judicael.paquet@gmail.com>
  * @copyright 	Copyright (c) 2013-2014 PAQUET Judicaël FR Inc. (https://github.com/las93)
  * @license   	https://github.com/las93/uranium/blob/master/LICENSE.md Tout droit réservé à PAQUET Judicaël
@@ -22,7 +22,7 @@ use \Venus\src\Batch\Controller\Entity  as Entity;
 /**
  * Controller Manager
  *
- * @category  	src\BackOffice
+ * @category  	src\plugin
  * @package   	src\BackOffice\common
  * @author    	Judicaël Paquet <judicael.paquet@gmail.com>
  * @copyright 	Copyright (c) 2013-2014 PAQUET Judicaël FR Inc. (https://github.com/las93)
@@ -34,19 +34,16 @@ use \Venus\src\Batch\Controller\Entity  as Entity;
  */
 abstract class Controller extends CoreController
 {
-	/**
-	 * Constructor
-	 *
-	 * @access public
-	 * @return object
-	 */
-	public function __construct() 
+    /**
+     * Controller constructor.
+     */
+    public function __construct()
 	{
 		parent::__construct();
 		
 		$this->installDb = function()
 		{
-		    $oDb = Config::get('Db');
+		    $oDb = Config::get('database');
 		    $oTables = json_decode(file_get_contents(__DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.preg_replace('/^.*\\\\([a-zA-Z0-9]+)$/', '$1', get_called_class()).DIRECTORY_SEPARATOR.'conf'.DIRECTORY_SEPARATOR.'Db.conf'));
 		    
 		    $oDb->configuration->tables = $oTables;
